@@ -25,7 +25,7 @@ Experiment:
 
 The Work:
 	The setup has to be stable and so the two 'methods' so far for sending and receiving over serial have been carefully,
-	tediously and painfully constructed to ensure that data is received from start to end, in order, intact and without 	corruption.
+	tediously and painfully constructed to ensure that data is received from start to end, in order, intact and without corruption.
 	Care must still be taken to avoid corruption:
 		Dumping other junk on the same line(s).
 		Interference.
