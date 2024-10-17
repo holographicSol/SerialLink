@@ -13,3 +13,6 @@ SerialLink2WayExample1 |
 Experiment: Reduce IO used for display(s) and HIDs on ESP32 while also gaining screen real estate and HIDs on ESP32:
 I am experimenting in performance and methods with having an ATMEGA2560 as a panel controller for a
 3.5" IPS TFT LCD Touchscreen Display (ILI9486), to be controlled by another microcontroller, in this case ESP32.
+This serial method used between 1-2 PINs on the ESP32:
+1 Wire example: Control a panel with one wire.
+2 Wire example: Control a panel with one wire, send touchscreen data (x,y,z) back to ESP32 with the second wire.
