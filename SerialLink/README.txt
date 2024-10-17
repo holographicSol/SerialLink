@@ -9,23 +9,31 @@ SerialLink2WayExample0 |
 SerialLink2WayExample1 |
 
 
-
-Experiment: Reduce IO used for display(s) and HIDs on ESP32 while also gaining screen real estate and HIDs on ESP32:
-I am experimenting in performance and methods with having an ATMEGA2560 as a panel controller for a
-3.5" IPS TFT LCD Touchscreen Display (ILI9486), to be controlled by another microcontroller, in this case ESP32.
-This serial method used between 1-2 PINs on the ESP32:
-1 Wire example: Control a panel with one wire.
-2 Wire example: Control a panel with one wire, send touchscreen data (x,y,z) back to ESP32 with the second wire.
+Problem using many cheap displays directly on the ESP32:
+	Not enough pixels to display required data.
+	If multiplexing multiple displays then we use a lot on IO.
+	Further IO may still also be required for interface/control.
 
 
+Experiment:
+	Reduce IO used for display(s) and HIDs on ESP32 while also GAINING screen real estate and HIDs on ESP32.
+	Make an ATMEGA2560 + ILI9486 sandwich to be controlled by the ESP32.
+	Method use between 1-2 PINs on the ESP32:
+	1 Wire example: Control a panel with one wire.
+	2 Wire example: Control a panel with one wire, send touchscreen data (x,y,z) back to ESP32 with the second wire.
 
-The setup has to be stable and so the two 'methods' so far for sending and receiving over serial have been carefully,
-tediously and painfully constructed to ensure that data is received from start to end, in order and without corruption.
-Care must still be taken to avoid corruption:
-Dumping other junk on the same line(s).
-Interference.
-Dodgy wiring.
-If care is taken in and around the setup then received data should be perfectly as expected every time like:
+
+The Work:
+	The setup has to be stable and so the two 'methods' so far for sending and receiving over serial have been carefully,
+	tediously and painfully constructed to ensure that data is received from start to end, in order, intact and without 	corruption.
+	Care must still be taken to avoid corruption:
+		Dumping other junk on the same line(s).
+		Interference.
+		Dodgy wiring.
+
+
+The Output (inspired by NMEA sentences, simple and effective):
+	If care is taken in and around the setup then received data should be perfectly as expected every time like:
 
 
 ATMEGA2560 Receives:
@@ -53,8 +61,8 @@ ESP32 Receives:
 -------------------------------------------
 
 
-Summary so far:
-More input.
-More screen space.
-All but 2 PINs remain free on ESP32.
-And its fast!
+Summary So Far:
+	More input.
+	More screen space.
+	All but 2 PINs remain free on ESP32.
+	And its fast! (calculate graphics on the ATMEGA itself, the serial to ATMEGA should command and populate data to be 	displayed).
