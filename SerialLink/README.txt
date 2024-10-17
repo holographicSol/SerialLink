@@ -21,6 +21,8 @@ Experiment:
 	Method use between 1-2 PINs on the ESP32:
 	1 Wire example: Control a panel with one wire.
 	2 Wire example: Control a panel with one wire, send touchscreen data (x,y,z) back to ESP32 with the second wire.
+	Touchscreen X,Y,Z -> ESP32
+	ATMEGA2560        <- Commands/Information From ESP32
 
 
 The Work:
