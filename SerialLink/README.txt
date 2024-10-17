@@ -63,6 +63,6 @@ ESP32 Receives:
 
 Summary So Far:
 	More input.
-	More screen space.
+	More screen space for information/graphics (I am interested in information).
 	All but 2 PINs remain free on ESP32.
 	And its fast! (calculate graphics on the ATMEGA itself, the serial to ATMEGA should command and populate data to be 	displayed).
