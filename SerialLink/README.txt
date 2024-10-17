@@ -16,3 +16,45 @@ I am experimenting in performance and methods with having an ATMEGA2560 as a pan
 This serial method used between 1-2 PINs on the ESP32:
 1 Wire example: Control a panel with one wire.
 2 Wire example: Control a panel with one wire, send touchscreen data (x,y,z) back to ESP32 with the second wire.
+
+
+
+The setup has to be stable and so the two 'methods' so far for sending and receiving over serial have been carefully,
+tediously and painfully constructed to ensure that data is received from start to end, in order and without corruption.
+Care must still be taken to avoid corruption:
+Dumping other junk on the same line(s).
+Interference.
+Dodgy wiring.
+If care is taken in and around the setup then received data should be perfectly as expected every time like:
+
+
+ATMEGA2560 Receives:
+-------------------------------------------
+[RXD]       $FOO,1,20,300,4000,OneWirePanelController,12345
+[RXD TOKEN] $FOO
+[RXD TOKEN] 1
+[RXD TOKEN] 20
+[RXD TOKEN] 300
+[RXD TOKEN] 4000
+[RXD TOKEN] OneWirePanelController
+[RXD TOKEN] 12345
+
+
+ESP32 Receives:
+-------------------------------------------
+[RXD]       $BAR,1,20,300,4000,OneWirePanelController,12345
+[RXD TOKEN] $BAR
+[RXD TOKEN] 1
+[RXD TOKEN] 20
+[RXD TOKEN] 300
+[RXD TOKEN] 4000
+[RXD TOKEN] OneWirePanelController
+[RXD TOKEN] 12345
+-------------------------------------------
+
+
+Summary so far:
+More input.
+More screen space.
+All but 2 PINs remain free on ESP32.
+And its fast!
