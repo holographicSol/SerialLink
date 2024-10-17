@@ -30,7 +30,7 @@ bool readRXD_1() {
     int rlen = Serial1.readBytes(SerialLink.BUFFER, 1024);
     if (rlen != 0) {
       for(int i = 0; i < rlen; i++) {
-        if (SerialLink.BUFFER[i] == 0x03)
+        if (SerialLink.BUFFER[i] == ETX)
           break;
         else {
           SerialLink.DATA[i] = SerialLink.BUFFER[i];
