@@ -21,8 +21,8 @@ Experiment:
 	Method use between 1-2 PINs on the ESP32:
 	1 Wire example: Control a panel with one wire.
 	2 Wire example: Control a panel with one wire, send touchscreen data (x,y,z) back to ESP32 with the second wire.
-	Touchscreen X,Y,Z -> ESP32
-	ATMEGA2560        <- Commands/Information From ESP32
+	Touchscreen X,Y,Z -> ESP32 (Example $TS,x,y,z... if z=1: x,y clicked -> function)
+	ATMEGA2560        <- Commands/Information From ESP32 (Example $GFX,runaGFXsequence,..)
 
 
 The Work:
@@ -32,6 +32,7 @@ The Work:
 		Dumping other junk on the same line(s).
 		Interference.
 		Dodgy wiring.
+	So far this setup is extremely fast and can yeild extremely responsive touchscreen to function(s) over serial, with all ESP32 clock and IO still available.
 
 
 The Output (inspired by NMEA sentences, simple and effective):
@@ -67,5 +68,5 @@ Summary So Far:
 	More input.
 	More screen space for information/graphics (I am interested in information).
 	Only 2 PINs are used on ESP32.
-	And its fast! (calculate graphics on the ATMEGA itself, the serial to ATMEGA should command and populate data to be displayed).
+	And its fast! (calculate graphics on the ATMEGA itself, the serial to ATMEGA should command and populate other data to be displayed).
 	A Touchscreen TFT hat on an ATMEGA2560 with aa ESP32 under the hood for compute with WiFi, Bluetooth, all available IO and a kick ass clock (for 10 bucks).
