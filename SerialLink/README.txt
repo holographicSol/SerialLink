@@ -32,7 +32,7 @@ The Work:
 		Dumping other junk on the same line(s).
 		Interference.
 		Dodgy wiring.
-	So far this setup is extremely fast and can yeild extremely responsive touchscreen to function(s) over serial, with all ESP32 clock and IO still available.
+	So far this setup is extremely fast and can yeild extremely responsive touchscreen to function(s) over serial, with all ESP32 clock and IO still available, and while intending to be 99.999% reliable (it has to be reliable or the funs over, that is why this project is initially called SerialLink, which I can base implementations of a fast reliable serial link upon, as required).
 
 
 The Output (inspired by NMEA sentences, simple and effective):
