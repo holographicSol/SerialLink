@@ -32,9 +32,9 @@ The Work:
 		Dumping other junk on the same line(s).
 		Interference.
 		Dodgy wiring.
-	So far this setup is extremely fast and can yeild extremely responsive touchscreen to function(s) over serial, with all ESP32 clock and IO still
-	available, and while intending to be 99.999% reliable (it has to be reliable or the funs over, that is why this project is initially called SerialLink,
-	which I can base implementations of a fast reliable serial link upon, as required).
+	So far this setup is extremely fast and can yeild extremely responsive touchscreen to function(s) over serial, with all ESP32 clock
+	and IO still available, and while intending to be 99.999% reliable (it has to be reliable or the funs over, that is why this project
+	is initially called SerialLink, which I can base implementations of a fast reliable serial link upon, as required).
 
 
 The Output (inspired by NMEA sentences, simple and effective):
@@ -71,7 +71,9 @@ Summary So Far:
 	More screen space for information/graphics (I am interested in information).
 	Only 2 PINs are used on ESP32.
 	And its fast! (calculate graphics on the ATMEGA itself, the serial to ATMEGA should command and populate other data to be displayed).
-	A Touchscreen TFT hat on an ATMEGA2560 with aa ESP32 under the hood for compute with WiFi, Bluetooth, all available IO and a kick ass clock (for 10
-	bucks).
-	The microcontrollers can be the same or differnt using the provided methods (possibly other methods may be required but possibly with the same 	principles, tagged, comma delimited senences terminated with an ETX char).
-	In these examples the ATMEGA2560 should be thought of as a peripheral and the ESP32 should be thought of as central. Serial multiplexing could expand on 	this.
+	A Touchscreen TFT hat on an ATMEGA2560 with aa ESP32 under the hood for compute with WiFi, Bluetooth, all available IO and a kick ass
+	clock (for 10 bucks).
+	The microcontrollers can be the same or differnt using the provided methods (possibly other methods may be required but possibly with
+	the same principles, tagged, comma delimited senences terminated with an ETX char).
+	In these examples the ATMEGA2560 should be thought of as a peripheral and the ESP32 should be thought of as central. Serial multiplexing
+	could expand on this.
