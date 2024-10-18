@@ -24,7 +24,7 @@ struct SerialLinkStruct {
   unsigned long TT_RXD_2 = 0;  // hard throttle interval
   unsigned long T0_TXD_2 = 0;   // hard throttle current time
   unsigned long T1_TXD_2 = 0;   // hard throttle previous time
-  unsigned long TT_TXD_2 = 20;  // hard throttle interval
+  unsigned long TT_TXD_2 = 10;  // hard throttle interval
 };
 SerialLinkStruct SerialLink;
 // ------------------------------------------------------------------------------------------------------------------
