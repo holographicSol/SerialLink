@@ -67,4 +67,5 @@ Summary So Far:
 	More input.
 	More screen space for information/graphics (I am interested in information).
 	Only 2 PINs are used on ESP32.
-	And its fast! (calculate graphics on the ATMEGA itself, the serial to ATMEGA should command and populate data to be 	displayed).
+	And its fast! (calculate graphics on the ATMEGA itself, the serial to ATMEGA should command and populate data to be displayed).
+	A Touchscreen TFT hat on an ATMEGA2560 with aa ESP32 under the hood with WiFi, Bluetooth, all available IO and a kick as clock (for 10 bucks.)
