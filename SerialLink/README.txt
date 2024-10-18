@@ -76,4 +76,4 @@ Summary So Far:
 	The microcontrollers can be the same or differnt using the provided methods (possibly other methods may be required but possibly with
 	the same principles, tagged, comma delimited senences terminated with an ETX char).
 	In these examples the ATMEGA2560 should be thought of as a peripheral and the ESP32 should be thought of as central. Serial multiplexing
-	could expand on this.
+	and things like PWM where suitable could expand on this.
