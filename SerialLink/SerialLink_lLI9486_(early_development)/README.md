@@ -2,9 +2,11 @@ Now that the SerialLink has been tested, it is time to use the reference to link
 
 Requirements:
 
-  ATMEGA2560 with a lLI9486 TFT hat.
-  ESP32 with an LED.
-  Two wires.
+ATMEGA2560 with a lLI9486 TFT hat.
+
+ESP32 with an LED.
+
+Two wires.
 
 ---
 
