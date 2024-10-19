@@ -5,3 +5,9 @@ Requirements:
 ATMEGA2560 with a lLI9486 TFT hat.
 ESP32 with an LED.
 Two wires.
+
+---
+
+![plot](./resources/img_001.JPG)
+
+---
