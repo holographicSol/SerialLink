@@ -11,6 +11,7 @@ ATMEGA2560 TX -> Serial1
 */
 
 // ------------------------------------------------------------------------------------------------------------------
+#include <stdio.h>
 #include <SPI.h>
 #include "TouchScreen_Setup.h"
 #include <Adafruit_GFX.h>
@@ -38,6 +39,7 @@ SdFat SD;
 #define SD_CS SdSpiConfig(10, DEDICATED_SPI, SD_SCK_MHZ(0), &softSpi)
 File root;
 bool sdinit = false;  // sdcard initialized
+char char_sdinit[4];
 
 // DISPLAY ----------------------------------------------------------------------------------------------------------
 bool tpz = false; // touchscreen pressed
@@ -57,6 +59,12 @@ unsigned long display_strlen[1][20] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   }
 };
+float t_display_0;
+float t_display_1;
+float t_display_delta;
+char debugData[1024];
+float fps;
+char char_fps[20];
 
 // SERIAL LINK STRUCT -----------------------------------------------------------------------------------------------
 struct SerialLinkStruct {
@@ -95,29 +103,37 @@ void InitializeSDCard(){
   sdinit = SD.begin(SD_CS);
   if (!sdinit) {Serial.println("sdcard initialization failed.");}
   else {Serial.println("sdcard initialized.");}
+  itoa(sdinit, char_sdinit, 10);
+}
+
+// DEBUG DATA -------------------------------------------------------------------------------------------------------
+void DebugData(){
+  memset(debugData, 0, sizeof(debugData));
+  strcat(debugData, "tp.x:"); strcat(debugData, SerialLink.tpx); strcat(debugData, " ");
+  strcat(debugData, "tp.y:"); strcat(debugData, SerialLink.tpy); strcat(debugData, " ");
+  strcat(debugData, "tp.z:"); strcat(debugData, SerialLink.tpz); strcat(debugData, " ");
+  strcat(debugData, "sd:");   strcat(debugData, char_sdinit); strcat(debugData, " ");
+  strcat(debugData, "fps:");   strcat(debugData, char_fps); strcat(debugData, " "); // can be commented
 }
 
 // DEBUG SERIAL -----------------------------------------------------------------------------------------------------
 void DebugSerial(){
   Serial.print("[DEBUG] ");
-  Serial.print("tp.x:"); Serial.print(tp.x); Serial.print(" ");
-  Serial.print("tp.y:"); Serial.print(tp.y); Serial.print(" ");
-  Serial.print("tp.z:"); Serial.print(tp.z); Serial.print(" ");
-  Serial.print("(char tp.x):"); Serial.print(SerialLink.tpx); Serial.print(" ");
-  Serial.print("(char tp.y):"); Serial.print(SerialLink.tpy); Serial.print(" ");
-  Serial.print("(char tp.z):"); Serial.print(SerialLink.tpz); Serial.println(" ");
+  Serial.print(""); Serial.print(debugData); Serial.print(" ");
 }
 
 // DEBUG DISPLAY ----------------------------------------------------------------------------------------------------
 void DebugDisplay(){
-  // debug text
+  // clear debug data
   tft.setCursor(10, 10);
   tft.setTextColor(BLACK, BLACK);
-  tft.println("                                        ");
+  for (int i=0; i<display_strlen[0][0]; i++) {tft.print(" ");}
+  display_strlen[0][0] = strlen(debugData);
+  // // print debug data
   tft.setCursor(10, 10);
   tft.setTextColor(WHITE, BLACK);
-  tft.print("x:"); tft.print(tp.x); tft.print(" y:"); tft.print(tp.y); tft.print(" z:"); tft.print(tpz); tft.print(" sd:"); tft.print(sdinit); tft.print("   ");
-  // debug button
+  tft.print(debugData);
+  // // debug button
   tft.drawRect(tft.width()-50, 10, 40, 40, WHITE);
   tft.setCursor(tft.width()-42, 22);
   tft.setTextColor(GREEN, BLACK);
@@ -146,6 +162,7 @@ void GetPanelXYZ(){
   itoa(tp.x, SerialLink.tpx, 10);
   itoa(tp.y, SerialLink.tpy, 10);
   itoa(tp.z, SerialLink.tpz, 10);
+  itoa((int)fps, char_fps, 10);  // can be commented as is only used for now during development to measure performance
 }
 
 // SETUP ------------------------------------------------------------------------------------------------------------
@@ -157,6 +174,7 @@ void setup(void) {
   Serial1.flush();
   InitializeDisplay();
   InitializeSDCard();
+  
 }
 
 uint16_t ConvertColor(char c) {
@@ -259,10 +277,20 @@ void WriteTXD1() {
   }
 }
 
+double calculate_fps(float microseconds) {
+    return 1000000.0 / microseconds;
+}
+
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
   readRXD1_Method0();
   GetPanelXYZ();
-  DebugSerial();
+  DebugData();
+  // DebugSerial(); // uncomment to see debug information over serial
+  t_display_0 = micros();
   DebugDisplay();
+  t_display_1 = micros();
+  t_display_delta = t_display_1 - t_display_0;
+  fps = calculate_fps(t_display_delta);
+  Serial.print("[FPS]: "); Serial.println(fps); // (time delta is currently only aimed at writing to the display)
 }
