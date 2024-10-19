@@ -77,3 +77,11 @@ Summary So Far:
 	the same principles, tagged, comma delimited senences terminated with an ETX char).
 	In these examples the ATMEGA2560 should be thought of as a peripheral and the ESP32 should be thought of as central. Serial multiplexing
 	and things like PWM where suitable could expand on this.
+
+
+Performance:
+	Some of the examples use MCUFriend_kbv for driving the ILI9341 TFT Display, ensure the following:
+		mcufriend_sheild.h: uncomment #include "mcufriend_shield.h"
+		mcufriend_special: uncomment #define USE_BLD_BST_MEGA2560 (in my case, you may use something else.)
+	This should about double the frame rate.
+	 
