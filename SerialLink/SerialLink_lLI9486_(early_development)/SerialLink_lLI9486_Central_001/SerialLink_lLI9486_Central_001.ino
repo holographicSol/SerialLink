@@ -118,7 +118,7 @@ void WriteTXD2() {
 // TXD2 DATA --------------------------------------------------------------------------------------------------------
 void TXD2Data() {
   memset(SerialLink.BUFFER, 0, 1024);
-  strcat(SerialLink.BUFFER, "$PRINT,10,20,WHITE,BLACK,0,LED0:");
+  strcat(SerialLink.BUFFER, "$PRINT,10,20,WHITE,BLACK,1,LED0:");
   if (digitalRead(LED0) == 1) {strcat(SerialLink.BUFFER, "1");}
   else if (digitalRead(LED0) == 0) {strcat(SerialLink.BUFFER, "0");}
   WriteTXD2();
