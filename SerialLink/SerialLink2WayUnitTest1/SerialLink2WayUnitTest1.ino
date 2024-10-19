@@ -114,7 +114,7 @@ void WriteTXD1() {
     memset(SerialLink.BUFFER, 0, 1024);
     strcat(SerialLink.BUFFER, "$BAR,1,20,300,4000,OneWirePanelController,12345");
     if (Serial1.availableForWrite()) {
-      Serial.print(""); Serial.println(SerialLink.BUFFER);
+      Serial.print("[TXD] "); Serial.println(SerialLink.BUFFER);
       Serial1.write(SerialLink.BUFFER);
       Serial1.write(ETX);
     }
