@@ -8,6 +8,6 @@ Two wires.
 
 ---
 
-![plot](./SerialLink_lLI9486.JPG)
+![plot](./resources/SerialLink_lLI9486.JPG)
 
 ---
