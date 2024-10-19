@@ -8,6 +8,11 @@ on ESP32 where a simple read until ETX was all that was required. Both methods r
 ATMEGA2560 RX -> Serial1
 ATMEGA2560 TX -> Serial1
 
+Note: The combination of the ILI9341 3.4" TFT Touchscreen Shield (Uno Shield) and ATMEGA2560 may not be great performing
+at taks like drawing graphics but can however be useful in many ways like say as an illuminated control panel that can
+also display some graphics and text at a reasonable performance, providing the text and graphics being written to the
+display are in small, efficient quantities, which actually is great because it means we can make use of those parts.
+
 */
 
 // ------------------------------------------------------------------------------------------------------------------
