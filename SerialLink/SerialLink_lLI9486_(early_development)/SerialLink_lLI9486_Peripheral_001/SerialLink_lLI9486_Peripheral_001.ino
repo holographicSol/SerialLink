@@ -40,7 +40,7 @@ File root;
 bool sdinit = false;  // sdcard initialized
 
 // DISPLAY ----------------------------------------------------------------------------------------------------------
-bool tpz = false;     // touchscreen pressed
+bool tpz = false; // touchscreen pressed
 unsigned long x0;
 unsigned long x1;
 unsigned long y0;
@@ -61,11 +61,11 @@ unsigned long display_strlen[1][20] = {
 // SERIAL LINK STRUCT -----------------------------------------------------------------------------------------------
 struct SerialLinkStruct {
   unsigned long nbytes;
-  char BUFFER[1024];           // read incoming bytes into this buffer
-  char DATA[1024];             // buffer refined using ETX
-  unsigned long T0_RXD_1 = 0;  // hard throttle current time
-  unsigned long T1_RXD_1 = 0;  // hard throttle previous time
-  unsigned long TT_RXD_1 = 0;  // hard throttle interval
+  char BUFFER[1024];            // read incoming bytes into this buffer
+  char DATA[1024];              // buffer refined using ETX
+  unsigned long T0_RXD_1 = 0;   // hard throttle current time
+  unsigned long T1_RXD_1 = 0;   // hard throttle previous time
+  unsigned long TT_RXD_1 = 0;   // hard throttle interval
   unsigned long T0_TXD_1 = 0;   // hard throttle current time
   unsigned long T1_TXD_1 = 0;   // hard throttle previous time
   unsigned long TT_TXD_1 = 10;  // hard throttle interval
@@ -139,9 +139,9 @@ void TPZFunction() {
 
 // GET DISPLAY INFORMATION ------------------------------------------------------------------------------------------
 void GetPanelXYZ(){
-  tp = ts.getPoint();     // tp.x, tp.y, tp.z are ADC values
-  pinMode(XM, OUTPUT);    // if sharing pins, you'll need to fix the directions of the touchscreen pins
-  pinMode(YP, OUTPUT);    // if sharing pins, you'll need to fix the directions of the touchscreen pins
+  tp = ts.getPoint();   // tp.x, tp.y, tp.z are ADC values
+  pinMode(XM, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
+  pinMode(YP, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
   if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {tpz = true; TPZFunction();} else {tpz = false;} // set tpz (display is touched bool)
   itoa(tp.x, SerialLink.tpx, 10);
   itoa(tp.y, SerialLink.tpy, 10);
