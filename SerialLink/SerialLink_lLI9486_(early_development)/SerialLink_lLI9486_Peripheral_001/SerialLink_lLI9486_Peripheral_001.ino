@@ -37,12 +37,10 @@ SoftSpiDriver<12, 11, 13> softSpi;  //Bit-Bang on the Shield pins SDFat.h v2
 SdFat SD;
 #define SD_CS SdSpiConfig(10, DEDICATED_SPI, SD_SCK_MHZ(0), &softSpi)
 File root;
-
-// BOOL -------------------------------------------------------------------------------------------------------------
-bool tpz = false;     // touchscreen pressed
 bool sdinit = false;  // sdcard initialized
 
 // DISPLAY ----------------------------------------------------------------------------------------------------------
+bool tpz = false;     // touchscreen pressed
 unsigned long x0;
 unsigned long x1;
 unsigned long y0;
@@ -53,7 +51,6 @@ unsigned long di;
 uint16_t color0;
 uint16_t color1;
 char printData[1024];
-
 unsigned long display_strlen[1][20] = {
   {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
