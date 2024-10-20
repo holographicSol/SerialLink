@@ -47,20 +47,24 @@ bool sdinit = false;  // sdcard initialized
 char char_sdinit[4];
 
 // DISPLAY ----------------------------------------------------------------------------------------------------------
-bool tpz = false; // touchscreen pressed
-unsigned long x0;
-unsigned long x1;
-unsigned long y0;
-unsigned long y1;
-unsigned long w;
-unsigned long h;
-unsigned long di; // code used in combination with display_strlen
-uint16_t color0;  // foreground
-uint16_t color1;  // background
-uint16_t color2;  // erase foreground
-uint16_t color3;  // erase background
-char printData[1024];
-unsigned long display_strlen[1][20] = {
+unsigned long x0;      // x0
+unsigned long x1;      // x1
+unsigned long y0;      // y0
+unsigned long y1;      // y1
+unsigned long w;       // width
+unsigned long h;       // height
+unsigned long di;      // code used in combination with StrLenStore
+uint16_t color0;       // foreground
+uint16_t color1;       // background
+uint16_t color2;       // erase foreground
+uint16_t color3;       // erase background
+char debugData[1024];  // chars to be written to display if debugging
+char printData[1024];  // chars to be written to display
+char tpx[56];          // touch position x
+char tpy[56];          // touch position y
+char tpz[56];          // touchscreen pressed (0 or 1) 
+bool tpz = false;      // touchscreen pressed (0 or 1) 
+unsigned long StrLenStore[1][20] = {
   // store strlens so we can erase displayed chars efficiently and smoothly if we need too by writing n spaces.
   // element zero is reserved for debug data.
   {
@@ -71,7 +75,6 @@ unsigned long display_strlen[1][20] = {
 float t_display_0;
 float t_display_1;
 float t_display_delta;
-char debugData[1024];
 float fps;
 char char_fps[20];
 
@@ -87,9 +90,6 @@ struct SerialLinkStruct {
   unsigned long T1_TXD_1 = 0;   // hard throttle previous time
   unsigned long TT_TXD_1 = 10;  // hard throttle interval
   unsigned long TOKEN_i;
-  char tpx[56];
-  char tpy[56];
-  char tpz[56];
 };
 SerialLinkStruct SerialLink;
 
@@ -118,9 +118,9 @@ void InitializeSDCard(){
 // DEBUG DATA -------------------------------------------------------------------------------------------------------
 void DebugData(){
   memset(debugData, 0, sizeof(debugData));
-  strcat(debugData, "tp.x:"); strcat(debugData, SerialLink.tpx); strcat(debugData, " ");
-  strcat(debugData, "tp.y:"); strcat(debugData, SerialLink.tpy); strcat(debugData, " ");
-  strcat(debugData, "tp.z:"); strcat(debugData, SerialLink.tpz); strcat(debugData, " ");
+  strcat(debugData, "tp.x:"); strcat(debugData, tpx); strcat(debugData, " ");
+  strcat(debugData, "tp.y:"); strcat(debugData, tpy); strcat(debugData, " ");
+  strcat(debugData, "tp.z:"); strcat(debugData, tpz); strcat(debugData, " ");
   strcat(debugData, "sd:");   strcat(debugData, char_sdinit); strcat(debugData, " ");
   strcat(debugData, "fps:");   strcat(debugData, char_fps); strcat(debugData, " "); // can be commented
 }
@@ -136,8 +136,8 @@ void DebugDisplay(){
   // clear debug data
   tft.setCursor(10, 10);
   tft.setTextColor(BLACK, BLACK);
-  for (int i=0; i<display_strlen[0][0]; i++) {tft.print(" ");}
-  display_strlen[0][0] = strlen(debugData);
+  for (int i=0; i<StrLenStore[0][0]; i++) {tft.print(" ");}
+  StrLenStore[0][0] = strlen(debugData);
   // // print debug data
   tft.setCursor(10, 10);
   tft.setTextColor(WHITE, BLACK);
@@ -168,9 +168,9 @@ void GetPanelXYZ(){
   pinMode(XM, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
   pinMode(YP, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
   if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {tpz = true; TPZFunction();} else {tpz = false;} // set tpz (display is touched bool)
-  itoa(tp.x, SerialLink.tpx, 10);
-  itoa(tp.y, SerialLink.tpy, 10);
-  itoa(tp.z, SerialLink.tpz, 10);
+  itoa(tp.x, tpx, 10);
+  itoa(tp.y, tpy, 10);
+  itoa(tp.z, tpz, 10);
   itoa((int)fps, char_fps, 10);  // can be commented as is only used for now during development to measure performance
 }
 
@@ -252,8 +252,8 @@ void readRXD1_Method0() {
         }
         tft.setCursor(x0, y0);
         tft.setTextColor(color2, color3);
-        for (int i=0; i<display_strlen[0][di]; i++) {tft.print(" ");}
-        display_strlen[0][di] = strlen(printData);
+        for (int i=0; i<StrLenStore[0][di]; i++) {tft.print(" ");}
+        StrLenStore[0][di] = strlen(printData);
         tft.setCursor(x0, y0);
         tft.setTextColor(color0, color1);
         tft.print(printData);
