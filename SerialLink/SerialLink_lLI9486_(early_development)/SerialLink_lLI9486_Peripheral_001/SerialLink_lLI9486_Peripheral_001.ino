@@ -294,7 +294,7 @@ void WriteTXD1() {
   if (SerialLink.T0_TXD_1 >= SerialLink.T1_TXD_1+SerialLink.TT_TXD_1) {
     SerialLink.T1_TXD_1 = SerialLink.T0_TXD_1;
     if (Serial1.availableForWrite()) {
-      // Serial.print("[TXD] "); Serial.println(SerialLink.BUFFER);
+      Serial.print("[TXD] "); Serial.println(SerialLink.BUFFER);
       Serial1.write(SerialLink.BUFFER);
       Serial1.write(ETX);
     }
@@ -310,11 +310,10 @@ void loop() {
   readRXD1_Method0();
   GetPanelXYZ();
   DebugData();
-  // DebugSerial(); // uncomment to see debug information over serial
+  DebugSerial();
   t_display_0 = micros();
   DebugDisplay();
   t_display_1 = micros();
   t_display_delta = t_display_1 - t_display_0;
   fps = calculate_fps(t_display_delta);
-  // Serial.print("[FPS]: "); Serial.println(fps); // (time delta is currently only aimed at writing to the display)
 }
