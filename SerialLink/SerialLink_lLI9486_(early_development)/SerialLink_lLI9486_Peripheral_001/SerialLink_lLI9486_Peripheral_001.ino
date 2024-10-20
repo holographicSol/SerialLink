@@ -54,7 +54,7 @@ unsigned long y0;
 unsigned long y1;
 unsigned long w;
 unsigned long h;
-unsigned long di;
+unsigned long di; // code used in combination with display_strlen
 uint16_t color0;  // foreground
 uint16_t color1;  // background
 uint16_t color2;  // erase foreground
