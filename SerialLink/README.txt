@@ -84,4 +84,7 @@ Performance:
 		mcufriend_sheild.h: uncomment #include "mcufriend_shield.h"
 		mcufriend_special: uncomment #define USE_BLD_BST_MEGA2560 (in my case, you may use something else.)
 	This should about double the frame rate.
-	 
+
+Architectural Theory:
+	Hardware architecture shape is inspired by general computers (ring and center).
+	Instructions between center and peripheral devices are insoired by NMEA sentences (being reasonable efficient and human friendly).
