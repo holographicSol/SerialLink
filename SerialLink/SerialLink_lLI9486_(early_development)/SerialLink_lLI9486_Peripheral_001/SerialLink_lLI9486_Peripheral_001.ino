@@ -264,7 +264,7 @@ void CompareTokens(char * tk) {
   // Plugin more functions when print completed (this SerialLink is for IL19486, there is more functionality to passthrough)
 }
 
-// READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
+// READ RXD1 METHOD 0 -----------------------------------------------------------------------------------------------
 void readRXD1_Method0() {
   if (RXD1ThrottleChecks() == true) {
     if (Serial1.available() > 0) {
@@ -279,7 +279,7 @@ void readRXD1_Method0() {
   }
 }
 
-// READ RXD: METHOD 1 -----------------------------------------------------------------------------------------------
+// READ RXD1 METHOD 1 -----------------------------------------------------------------------------------------------
 void readRXD1_Method1() {
   if (Serial1.available() > 0) {
     memset(SerialLink.BUFFER, 0, 1024);
