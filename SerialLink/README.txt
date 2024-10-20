@@ -91,7 +91,7 @@ Performance:
 	sent, but that another peripheral could, which is fantastic news. I intend to complete a SerialLink for the ILI9341 hat on the
 	ATMEGA2560, and do next intend to build a peripheral (perhaps another touch screen display on a microcontroller) that can make use
 	of more instructions per second from a central device, again using/building upon the SerialLink base/reference I have made, allowing
-	for 1-2 wire peripheral interfacing.
+	for 1-2 wire peripheral interfacing from a central loaction.
 
 Architectural Theory:
 	Hardware architecture shape is inspired by general computer hardware layout and network architecture (in this case ring and center).
