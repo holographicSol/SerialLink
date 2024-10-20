@@ -81,6 +81,7 @@ char char_fps[20];
 // SERIAL LINK STRUCT -----------------------------------------------------------------------------------------------
 struct SerialLinkStruct {
   unsigned long nbytes;
+  unsigned long i_nbytes;
   char BUFFER[1024];            // read incoming bytes into this buffer
   char DATA[1024];              // buffer refined using ETX
   unsigned long T0_RXD_1 = 0;   // hard throttle current time
@@ -134,15 +135,10 @@ void DebugSerial(){
 
 // DEBUG DISPLAY ----------------------------------------------------------------------------------------------------
 void DebugDisplay(){
-  // clear debug data
-  tft.setCursor(10, 10);
-  tft.setTextColor(BLACK, BLACK);
-  for (int i=0; i<StrLenStore[0][0]; i++) {tft.print(" ");}
+  // debug text
+  tft.setCursor(10, 10); tft.setTextColor(BLACK, BLACK); for (int i=0; i<StrLenStore[0][0]; i++) {tft.print(" ");}
   StrLenStore[0][0] = strlen(debugData);
-  // print debug data
-  tft.setCursor(10, 10);
-  tft.setTextColor(WHITE, BLACK);
-  tft.print(debugData);
+  tft.setCursor(10, 10); tft.setTextColor(WHITE, BLACK); tft.print(debugData);
   // debug button
   tft.drawRect(tft.width()-50, 10, 40, 40, WHITE);
   tft.setCursor(tft.width()-42, 22);
@@ -154,7 +150,6 @@ void DebugDisplay(){
 
 // TPZ FUNCTION -----------------------------------------------------------------------------------------------------
 void TPZFunction() {
-  Serial.println("[FUNCTION] RunClickFunction");
   if ((tp.x > 820) && (tp.x < 880) && (tp.y > 100) && (tp.y < 170)) {
     Serial.println("[RunClickFunction] LED0");
     memset(SerialLink.BUFFER, 0, 1024);
@@ -243,12 +238,10 @@ void readRXD1_Method0() {
       memset(SerialLink.DATA, 0, 1024);
       SerialLink.nbytes = Serial1.readBytes(SerialLink.BUFFER, 1024);
       if (SerialLink.nbytes != 0) {
-        for(int i = 0; i < SerialLink.nbytes; i++) {
-          if (SerialLink.BUFFER[i] == ETX)
+        for(SerialLink.i_nbytes = 0; SerialLink.i_nbytes < SerialLink.nbytes; SerialLink.i_nbytes++) {
+          if (SerialLink.BUFFER[SerialLink.i_nbytes] == ETX)
             break;
-          else {
-            SerialLink.DATA[i] = SerialLink.BUFFER[i];
-          }
+          else {SerialLink.DATA[SerialLink.i_nbytes] = SerialLink.BUFFER[SerialLink.i_nbytes];}
         }
         Serial.println("-------------------------------------------");
         Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
