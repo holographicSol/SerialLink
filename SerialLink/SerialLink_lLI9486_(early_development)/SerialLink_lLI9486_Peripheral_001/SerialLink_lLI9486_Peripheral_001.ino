@@ -63,7 +63,7 @@ char printData[1024];  // chars to be written to display
 char tpx[56];          // touch position x
 char tpy[56];          // touch position y
 char tpz[56];          // touchscreen pressed (0 or 1) 
-bool tpz = false;      // touchscreen pressed (0 or 1) 
+bool tpz_bool = false; // touchscreen pressed (0 or 1) 
 unsigned long StrLenStore[1][20] = {
   // store strlens so we can erase displayed chars efficiently and smoothly if we need too by writing n spaces.
   // element zero is reserved for debug data.
@@ -167,10 +167,10 @@ void GetPanelXYZ(){
   tp = ts.getPoint();   // tp.x, tp.y, tp.z are ADC values
   pinMode(XM, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
   pinMode(YP, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
-  if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {tpz = true; TPZFunction();} else {tpz = false;} // set tpz (display is touched bool)
+  if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {tpz_bool = true; TPZFunction();} else {tpz_bool = false;} // set tpz (display is touched bool)
   itoa(tp.x, tpx, 10);
   itoa(tp.y, tpy, 10);
-  itoa(tp.z, tpz, 10);
+  itoa(tpz_bool, tpz, 10);
   itoa((int)fps, char_fps, 10);  // can be commented as is only used for now during development to measure performance
 }
 
