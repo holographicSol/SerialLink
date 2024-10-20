@@ -87,4 +87,4 @@ Performance:
 
 Architectural Theory:
 	Hardware architecture shape is inspired by general computers (ring and center).
-	Instructions between center and peripheral devices are insoired by NMEA sentences (being reasonable efficient and human friendly).
+	Instructions between center and peripheral devices are inspired by NMEA sentences (being reasonably efficient and human friendly).
