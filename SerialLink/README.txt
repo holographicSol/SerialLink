@@ -84,6 +84,13 @@ Performance:
 		mcufriend_sheild.h: uncomment #include "mcufriend_shield.h"
 		mcufriend_special: uncomment #define USE_BLD_BST_MEGA2560 (in my case, you may use something else.)
 	This should about double the frame rate.
+	On ESP32 SerialLink can TXD a print to ILI9486 hat on an MTMEGA2560 in 7 microseconds, however in the case of a ILI9486 hat on 
+	an ATMEGA2560m an ILI9486 hat on an ATMEGA2560 may take a while to write to the ILI9486. This the peripherals problem and SerialLink
+	on an ESP32 with a TXD time to a peripheral of 7 microseconds is capable of providing over 140,000 instructions to any given peripheral
+	a second, meaning that in the case of a slower peripheral, the slower peripheral can't make use of every instruction capable of beong
+	sent, but that another peripheral could, which is fantastic news. I intend to complete a SerialLink for the ILI9341 hat on the
+	ATMEGA2560, and do next intend to build a peripheral (perhaps another touch screen display on a microcontroller) that use more of
+	the instructions per second.
 
 Architectural Theory:
 	Hardware architecture shape is inspired by general computer hardware layout and network architecture (in this case ring and center).
