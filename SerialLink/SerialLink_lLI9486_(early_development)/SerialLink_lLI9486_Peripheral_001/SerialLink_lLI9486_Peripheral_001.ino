@@ -235,6 +235,7 @@ void PTPrint() {
   tft.println(" ");
 }
 
+// RXD1 THROTTLE CHECKS ---------------------------------------------------------------------------------------------
 bool RXD1ThrottleChecks() {
   SerialLink.T0_RXD_1 = millis();
   if (SerialLink.T0_RXD_1 >= SerialLink.T1_RXD_1+SerialLink.TT_RXD_1) {
@@ -243,19 +244,25 @@ bool RXD1ThrottleChecks() {
   }
 }
 
+// RXD1 READ BYTES UNTIL ETX ----------------------------------------------------------------------------------------
+bool readBytesUntilETX() {
+  memset(SerialLink.BUFFER, 0, 1024);
+  memset(SerialLink.DATA, 0, 1024);
+  SerialLink.nbytes = Serial1.readBytes(SerialLink.BUFFER, 1024);
+  if (SerialLink.nbytes != 0) {
+    for(SerialLink.i_nbytes = 0; SerialLink.i_nbytes < SerialLink.nbytes; SerialLink.i_nbytes++) {
+      if (SerialLink.BUFFER[SerialLink.i_nbytes] == ETX)
+        return true;
+      else {SerialLink.DATA[SerialLink.i_nbytes] = SerialLink.BUFFER[SerialLink.i_nbytes];}
+    }
+  }
+}
+
 // READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
 void readRXD1_Method0() {
   if (RXD1ThrottleChecks() == true) {
     if (Serial1.available() > 0) {
-      memset(SerialLink.BUFFER, 0, 1024);
-      memset(SerialLink.DATA, 0, 1024);
-      SerialLink.nbytes = Serial1.readBytes(SerialLink.BUFFER, 1024);
-      if (SerialLink.nbytes != 0) {
-        for(SerialLink.i_nbytes = 0; SerialLink.i_nbytes < SerialLink.nbytes; SerialLink.i_nbytes++) {
-          if (SerialLink.BUFFER[SerialLink.i_nbytes] == ETX)
-            break;
-          else {SerialLink.DATA[SerialLink.i_nbytes] = SerialLink.BUFFER[SerialLink.i_nbytes];}
-        }
+      if (readBytesUntilETX() == true) {
         Serial.println("-------------------------------------------");
         Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
         SerialLink.TOKEN_i = 0;
