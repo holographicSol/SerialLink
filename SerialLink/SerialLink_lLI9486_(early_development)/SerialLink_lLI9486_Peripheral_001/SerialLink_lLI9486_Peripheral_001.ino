@@ -258,6 +258,7 @@ bool readBytesUntilETX() {
   }
 }
 
+// COMPARE TOKENS ---------------------------------------------------------------------------------------------------
 void CompareTokens(char * tk) {
   if (strcmp(SerialLink.token, "$PRINT") == 0) {PTPrint();}
   // Plugin more functions when print completed (this SerialLink is for IL19486, there is more functionality to passthrough)
