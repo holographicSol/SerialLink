@@ -86,5 +86,5 @@ Performance:
 	This should about double the frame rate.
 
 Architectural Theory:
-	Hardware architecture shape is inspired by general computers (ring and center).
+	Hardware architecture shape is inspired by general computer hardware layout and network architecture (in this case ring and center).
 	Instructions between center and peripheral devices are inspired by NMEA sentences (being reasonably efficient and human friendly).
