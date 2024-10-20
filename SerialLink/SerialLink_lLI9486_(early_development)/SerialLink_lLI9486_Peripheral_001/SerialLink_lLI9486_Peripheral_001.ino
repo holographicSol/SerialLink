@@ -138,11 +138,11 @@ void DebugDisplay(){
   tft.setTextColor(BLACK, BLACK);
   for (int i=0; i<StrLenStore[0][0]; i++) {tft.print(" ");}
   StrLenStore[0][0] = strlen(debugData);
-  // // print debug data
+  // print debug data
   tft.setCursor(10, 10);
   tft.setTextColor(WHITE, BLACK);
   tft.print(debugData);
-  // // debug button
+  // debug button
   tft.drawRect(tft.width()-50, 10, 40, 40, WHITE);
   tft.setCursor(tft.width()-42, 22);
   tft.setTextColor(GREEN, BLACK);
