@@ -167,7 +167,7 @@ void GetPanelXYZ(){
   tp = ts.getPoint();   // tp.x, tp.y, tp.z are ADC values
   pinMode(XM, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
   pinMode(YP, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
-  if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {bool_tpz = true; TPZFunction();} else {bool_tpz = false;} // set tpz (display is touched bool)
+  if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {bool_tpz = true; TPZFunction();} else {bool_tpz = false;}
   itoa(tp.x, tpx, 10);           // touchscreen pressed x
   itoa(tp.y, tpy, 10);           // touchscreen pressed y
   itoa(bool_tpz, tpz, 10);       // touchscreen pressed
