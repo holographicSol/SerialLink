@@ -89,8 +89,7 @@ Performance:
 	on an ESP32 with a TXD time to a peripheral of 7 microseconds is capable of providing over 140,000 instructions to any given peripheral
 	a second, meaning that in the case of a slower peripheral, the slower peripheral can't make use of every instruction capable of beong
 	sent, but that another peripheral could, which is fantastic news. I intend to complete a SerialLink for the ILI9341 hat on the
-	ATMEGA2560, and do next intend to build a peripheral (perhaps another touch screen display on a microcontroller) that use more of
-	the instructions per second.
+	ATMEGA2560, and do next intend to build a peripheral (perhaps another touch screen display on a microcontroller) that can make use of 		more instructions per second from a central device.
 
 Architectural Theory:
 	Hardware architecture shape is inspired by general computer hardware layout and network architecture (in this case ring and center).
