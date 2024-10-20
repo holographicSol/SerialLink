@@ -122,7 +122,7 @@ void DebugData(){
   strcat(debugData, "tp.y:"); strcat(debugData, tpy); strcat(debugData, " ");
   strcat(debugData, "tp.z:"); strcat(debugData, tpz); strcat(debugData, " ");
   strcat(debugData, "sd:");   strcat(debugData, char_sdinit); strcat(debugData, " ");
-  strcat(debugData, "fps:");   strcat(debugData, char_fps); strcat(debugData, " "); // can be commented
+  strcat(debugData, "fps:");   strcat(debugData, char_fps); strcat(debugData, " ");
 }
 
 // DEBUG SERIAL -----------------------------------------------------------------------------------------------------
@@ -168,9 +168,9 @@ void GetPanelXYZ(){
   pinMode(XM, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
   pinMode(YP, OUTPUT);  // if sharing pins, you'll need to fix the directions of the touchscreen pins
   if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {bool_tpz = true; TPZFunction();} else {bool_tpz = false;} // set tpz (display is touched bool)
-  itoa(tp.x, tpx, 10);
-  itoa(tp.y, tpy, 10);
-  itoa(bool_tpz, tpz, 10);
+  itoa(tp.x, tpx, 10);           // touchscreen pressed x
+  itoa(tp.y, tpy, 10);           // touchscreen pressed y
+  itoa(bool_tpz, tpz, 10);       // touchscreen pressed
   itoa((int)fps, char_fps, 10);  // can be commented as is only used for now during development to measure performance
 }
 
