@@ -90,7 +90,7 @@ Performance:
 	a second, meaning that in the case of a slower peripheral, the slower peripheral can't make use of every instruction capable of beong
 	sent, but that another peripheral could, which is fantastic news. I intend to complete a SerialLink for the ILI9341 hat on the
 	ATMEGA2560, and do next intend to build a peripheral (perhaps another touch screen display on a microcontroller) that can make use
-	more instructions per second from a central device.
+	of more instructions per second from a central device.
 
 Architectural Theory:
 	Hardware architecture shape is inspired by general computer hardware layout and network architecture (in this case ring and center).
