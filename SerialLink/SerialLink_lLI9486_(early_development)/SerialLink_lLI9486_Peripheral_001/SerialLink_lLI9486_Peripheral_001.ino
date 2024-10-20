@@ -11,7 +11,7 @@ ATMEGA2560 TX -> Serial1
 Note: The combination of the ILI9341 3.4" TFT Touchscreen Shield (Uno Shield) and ATMEGA2560 may not be great performing
 at tasks like drawing graphics but can however be useful in many ways like say as an illuminated control panel that can
 also display some graphics and text at a reasonable performance, providing the text and graphics being written to the
-display are in small, efficient quantities, which actually is great because it means we can make use of those parts.
+display are in small, efficient quantities, which actually is great because it means we can make use of those parts.  
 
 */
 
@@ -182,7 +182,7 @@ void setup(void) {
   
 }
 
-uint16_t ConvertColor(char c) {
+uint16_t ConvertColor(char * c) {
   if (strcmp(c, "BLACK") == 0)       {return BLACK;}
   if (strcmp(c, "NAVY") == 0)        {return NAVY;}
   if (strcmp(c, "DARKGREEN") == 0)   {return DARKGREEN;}
@@ -201,7 +201,6 @@ uint16_t ConvertColor(char c) {
   if (strcmp(c, "WHITE") == 0)       {return WHITE;}
   if (strcmp(c, "ORANGE") == 0)      {return ORANGE;}
   if (strcmp(c, "GREENYELLOW") == 0) {return GREENYELLOW;}
-  else {color0=WHITE; color1=BLACK;}
 }
 
 // READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
@@ -246,11 +245,11 @@ void readRXD1_Method0() {
           SerialLink.TOKEN_i++;
         }
         tft.setCursor(x0, y0);
-        tft.setTextColor(BLACK, BLACK);
+        tft.setTextColor(color1, color1);
         for (int i=0; i<display_strlen[0][di]; i++) {tft.print(" ");}
         display_strlen[0][di] = strlen(printData);
         tft.setCursor(x0, y0);
-        tft.setTextColor(WHITE, BLACK);
+        tft.setTextColor(color0, color1);
         tft.print(printData);
         tft.println(" ");
       }
@@ -297,5 +296,6 @@ void loop() {
   t_display_1 = micros();
   t_display_delta = t_display_1 - t_display_0;
   fps = calculate_fps(t_display_delta);
-  Serial.print("[FPS]: "); Serial.println(fps); // (time delta is currently only aimed at writing to the display)
+  // Serial.print("[FPS]: "); Serial.println(fps); // (time delta is currently only aimed at writing to the display)
+  delay(1);
 }
