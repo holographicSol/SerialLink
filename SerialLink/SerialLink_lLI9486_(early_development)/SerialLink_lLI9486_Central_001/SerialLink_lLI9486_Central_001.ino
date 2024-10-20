@@ -123,7 +123,7 @@ void TXD2Data() {
   if (digitalRead(LED0) == 1) {strcat(SerialLink.BUFFER, "1");}
   else if (digitalRead(LED0) == 0) {strcat(SerialLink.BUFFER, "0");}
   WriteTXD2();
-  // can send more to other peripherals...
+  // can send more to other and or same peripherals...
 }
 
 // LOOP -------------------------------------------------------------------------------------------------------------
