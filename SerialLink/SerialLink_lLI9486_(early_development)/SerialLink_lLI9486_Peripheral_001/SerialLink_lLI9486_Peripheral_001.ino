@@ -90,6 +90,7 @@ struct SerialLinkStruct {
   unsigned long T1_TXD_1 = 0;   // hard throttle previous time
   unsigned long TT_TXD_1 = 10;  // hard throttle interval
   unsigned long TOKEN_i;
+  char * token = strtok(BUFFER, ",");
 };
 SerialLinkStruct SerialLink;
 
@@ -208,18 +209,18 @@ uint16_t ConvertColor(char * c) {
 }
 
 // PASSTHROUGH PRINT ------------------------------------------------------------------------------------------------
-void PTPrint(char * token) { // passthrough print function
-  while( token != NULL ) {
-    Serial.print("[RXD TOKEN "); Serial.print(SerialLink.TOKEN_i); Serial.print("] "); Serial.println(token);
-    if (SerialLink.TOKEN_i == 1) {x0 = atol(token);}
-    if (SerialLink.TOKEN_i == 2) {y0 = atol(token);}
-    if (SerialLink.TOKEN_i == 3) {color0 = ConvertColor(token);}
-    if (SerialLink.TOKEN_i == 4) {color1 = ConvertColor(token);}
-    if (SerialLink.TOKEN_i == 5) {color2 = ConvertColor(token);}
-    if (SerialLink.TOKEN_i == 6) {color3 = ConvertColor(token);}
-    if (SerialLink.TOKEN_i == 7) {di = atol(token);}
-    if (SerialLink.TOKEN_i == 8) {memset(printData, 0, sizeof(printData)); strcat(printData, token);}
-    token = strtok(NULL, ",");
+void PTPrint() { // passthrough print function
+  while( SerialLink.token != NULL ) {
+    Serial.print("[RXD TOKEN "); Serial.print(SerialLink.TOKEN_i); Serial.print("] "); Serial.println(SerialLink.token);
+    if (SerialLink.TOKEN_i == 1) {x0 = atol(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 2) {y0 = atol(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 3) {color0 = ConvertColor(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 4) {color1 = ConvertColor(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 5) {color2 = ConvertColor(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 6) {color3 = ConvertColor(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 7) {di = atol(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 8) {memset(printData, 0, sizeof(printData)); strcat(printData, SerialLink.token);}
+    SerialLink.token = strtok(NULL, ",");
     SerialLink.TOKEN_i++;
   }
   tft.setCursor(x0, y0);
@@ -233,39 +234,32 @@ void PTPrint(char * token) { // passthrough print function
 }
 
 // READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
-bool readRXD1_Method00() {
-  if (Serial1.available() > 0) {
-    memset(SerialLink.BUFFER, 0, 1024);
-    memset(SerialLink.DATA, 0, 1024);
-    int rlen = Serial1.readBytes(SerialLink.BUFFER, 1024);
-    if (rlen != 0) {
-      for(int i = 0; i < rlen; i++) {
-        if (SerialLink.BUFFER[i] == ETX)
-          break;
-        else {
-          SerialLink.DATA[i] = SerialLink.BUFFER[i];
-        }
-      }
-      return true;
-    }
-  }
-}
 void readRXD1_Method0() {
   SerialLink.T0_RXD_1 = millis();
   if (SerialLink.T0_RXD_1 >= SerialLink.T1_RXD_1+SerialLink.TT_RXD_1) {
     SerialLink.T1_RXD_1 = SerialLink.T0_RXD_1;
-    if (readRXD1_Method00() == true) {
-      Serial.println("-------------------------------------------");
-      Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
-      SerialLink.TOKEN_i = 0;
-      char * token = strtok(SerialLink.DATA, ",");
-
-      // print: simple and a great place to start wiring up the passthrough
-      if (strcmp(token, "$PRINT") == 0) {
-        PTPrint(token);
+    if (Serial1.available() > 0) {
+      memset(SerialLink.BUFFER, 0, 1024);
+      memset(SerialLink.DATA, 0, 1024);
+      SerialLink.nbytes = Serial1.readBytes(SerialLink.BUFFER, 1024);
+      if (SerialLink.nbytes != 0) {
+        for(int i = 0; i < SerialLink.nbytes; i++) {
+          if (SerialLink.BUFFER[i] == ETX)
+            break;
+          else {
+            SerialLink.DATA[i] = SerialLink.BUFFER[i];
+          }
+        }
+        Serial.println("-------------------------------------------");
+        Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
+        SerialLink.TOKEN_i = 0;
+        SerialLink.token = strtok(SerialLink.DATA, ",");
+        // print: simple and a great place to start wiring up the passthrough
+        if (strcmp(SerialLink.token, "$PRINT") == 0) {
+          PTPrint();
+        }
+        // Plugin more functions when print completed (this SerialLink is for IL19486, there is more functionality to passthrough)
       }
-
-      // Plugin more functions when print completed (this SerialLink is for IL19486, there is more functionality to passthrough)
     }
   }
 }
@@ -308,5 +302,4 @@ void loop() {
   t_display_delta = t_display_1 - t_display_0;
   fps = calculate_fps(t_display_delta);
   // Serial.print("[FPS]: "); Serial.println(fps); // (time delta is currently only aimed at writing to the display)
-  // delay(1);
 }
