@@ -300,6 +300,7 @@ void WriteTXD1() {
   }
 }
 
+// CALCULATE FPS ----------------------------------------------------------------------------------------------------
 double calculate_fps(float microseconds) {
     return 1000000.0 / microseconds;
 }
