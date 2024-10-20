@@ -55,8 +55,10 @@ unsigned long y1;
 unsigned long w;
 unsigned long h;
 unsigned long di;
-uint16_t color0;
-uint16_t color1;
+uint16_t color0;  // foreground
+uint16_t color1;  // background
+uint16_t color2;  // erase foreground
+uint16_t color3;  // erase background
 char printData[1024];
 unsigned long display_strlen[1][20] = {
   {
@@ -239,13 +241,15 @@ void readRXD1_Method0() {
           if (SerialLink.TOKEN_i == 2) {y0 = atol(token);}
           if (SerialLink.TOKEN_i == 3) {color0 = ConvertColor(token);}
           if (SerialLink.TOKEN_i == 4) {color1 = ConvertColor(token);}
-          if (SerialLink.TOKEN_i == 5) {di = atol(token);}
-          if (SerialLink.TOKEN_i == 6) {memset(printData, 0, sizeof(printData)); strcat(printData, token);}
+          if (SerialLink.TOKEN_i == 5) {color2 = ConvertColor(token);}
+          if (SerialLink.TOKEN_i == 6) {color3 = ConvertColor(token);}
+          if (SerialLink.TOKEN_i == 7) {di = atol(token);}
+          if (SerialLink.TOKEN_i == 8) {memset(printData, 0, sizeof(printData)); strcat(printData, token);}
           token = strtok(NULL, ",");
           SerialLink.TOKEN_i++;
         }
         tft.setCursor(x0, y0);
-        tft.setTextColor(color1, color1);
+        tft.setTextColor(color2, color3);
         for (int i=0; i<display_strlen[0][di]; i++) {tft.print(" ");}
         display_strlen[0][di] = strlen(printData);
         tft.setCursor(x0, y0);
@@ -297,5 +301,5 @@ void loop() {
   t_display_delta = t_display_1 - t_display_0;
   fps = calculate_fps(t_display_delta);
   // Serial.print("[FPS]: "); Serial.println(fps); // (time delta is currently only aimed at writing to the display)
-  delay(1);
+  // delay(1);
 }
