@@ -61,6 +61,8 @@ uint16_t color2;  // erase foreground
 uint16_t color3;  // erase background
 char printData[1024];
 unsigned long display_strlen[1][20] = {
+  // store strlens so we can erase displayed chars efficiently and smoothly if we need too by writing n spaces.
+  // element zero is reserved for debug data.
   {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
