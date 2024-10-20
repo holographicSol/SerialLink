@@ -183,7 +183,6 @@ void setup(void) {
   Serial1.flush();
   InitializeDisplay();
   InitializeSDCard();
-  
 }
 
 uint16_t ConvertColor(char * c) {
