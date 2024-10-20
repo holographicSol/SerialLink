@@ -47,23 +47,24 @@ bool sdinit = false;  // sdcard initialized
 char char_sdinit[4];
 
 // DISPLAY ----------------------------------------------------------------------------------------------------------
-unsigned long x0;      // x0
-unsigned long x1;      // x1
-unsigned long y0;      // y0
-unsigned long y1;      // y1
-unsigned long w;       // width
-unsigned long h;       // height
-unsigned long di;      // code used in combination with StrLenStore
-uint16_t color0;       // foreground
-uint16_t color1;       // background
-uint16_t color2;       // erase foreground
-uint16_t color3;       // erase background
-char debugData[1024];  // chars to be written to display if debugging
-char printData[1024];  // chars to be written to display
-char tpx[56];          // touch position x
-char tpy[56];          // touch position y
-char tpz[56];          // touchscreen pressed (0 or 1) 
-bool bool_tpz = false; // touchscreen pressed (0 or 1) 
+unsigned long x0;        // x0
+unsigned long x1;        // x1
+unsigned long y0;        // y0
+unsigned long y1;        // y1
+unsigned long w;         // width
+unsigned long h;         // height
+unsigned long i_nspace;  // code used in combination with StrLenStore
+unsigned long nspace;    // code used in combination with StrLenStore
+uint16_t color0;         // foreground
+uint16_t color1;         // background
+uint16_t color2;         // erase foreground
+uint16_t color3;         // erase background
+char debugData[1024];    // chars to be written to display if debugging
+char printData[1024];    // chars to be written to display
+char tpx[56];            // touch position x
+char tpy[56];            // touch position y
+char tpz[56];            // touchscreen pressed (0 or 1) 
+bool bool_tpz = false;   // touchscreen pressed (0 or 1) 
 unsigned long StrLenStore[1][20] = {
   // store strlens so we can erase displayed chars efficiently and smoothly if we need too by writing n spaces.
   // element zero is reserved for debug data.
@@ -136,7 +137,7 @@ void DebugSerial(){
 // DEBUG DISPLAY ----------------------------------------------------------------------------------------------------
 void DebugDisplay(){
   // debug text
-  tft.setCursor(10, 10); tft.setTextColor(BLACK, BLACK); for (int i=0; i<StrLenStore[0][0]; i++) {tft.print(" ");}
+  PrintSpace(10, 10, StrLenStore[0][0], BLACK, BLACK);
   StrLenStore[0][0] = strlen(debugData);
   tft.setCursor(10, 10); tft.setTextColor(WHITE, BLACK); tft.print(debugData);
   // debug button
@@ -203,6 +204,12 @@ uint16_t ConvertColor(char * c) {
   if (strcmp(c, "GREENYELLOW") == 0) {return GREENYELLOW;}
 }
 
+void PrintSpace(unsigned long x, unsigned long y, unsigned long n, uint16_t c0, uint16_t c1) {
+  tft.setCursor(x, y);
+  tft.setTextColor(c0, c1);
+  for (i_nspace = 0; i_nspace < n; i_nspace++) {tft.print(" ");}
+}
+
 // PASSTHROUGH PRINT ------------------------------------------------------------------------------------------------
 void PTPrint() {
   while( SerialLink.token != NULL ) {
@@ -213,15 +220,13 @@ void PTPrint() {
     if (SerialLink.TOKEN_i == 4) {color1 = ConvertColor(SerialLink.token);}
     if (SerialLink.TOKEN_i == 5) {color2 = ConvertColor(SerialLink.token);}
     if (SerialLink.TOKEN_i == 6) {color3 = ConvertColor(SerialLink.token);}
-    if (SerialLink.TOKEN_i == 7) {di = atol(SerialLink.token);}
+    if (SerialLink.TOKEN_i == 7) {nspace = atol(SerialLink.token);}
     if (SerialLink.TOKEN_i == 8) {memset(printData, 0, sizeof(printData)); strcat(printData, SerialLink.token);}
     SerialLink.token = strtok(NULL, ",");
     SerialLink.TOKEN_i++;
   }
-  tft.setCursor(x0, y0);
-  tft.setTextColor(color2, color3);
-  for (int i=0; i<StrLenStore[0][di]; i++) {tft.print(" ");}
-  StrLenStore[0][di] = strlen(printData);
+  PrintSpace(x0, y0, StrLenStore[0][nspace], BLACK, BLACK);
+  StrLenStore[0][nspace] = strlen(printData);
   tft.setCursor(x0, y0);
   tft.setTextColor(color0, color1);
   tft.print(printData);
