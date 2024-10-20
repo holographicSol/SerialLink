@@ -243,6 +243,15 @@ bool RXD1ThrottleChecks() {
   }
 }
 
+// TXD1 THROTTLE CHECKS ---------------------------------------------------------------------------------------------
+bool TXD1ThrottleChecks() {
+SerialLink.T0_TXD_1 = millis();
+if (SerialLink.T0_TXD_1 >= SerialLink.T1_TXD_1+SerialLink.TT_TXD_1) {
+  SerialLink.T1_TXD_1 = SerialLink.T0_TXD_1;
+  return true;
+}
+}
+
 // RXD1 READ BYTES UNTIL ETX ----------------------------------------------------------------------------------------
 bool readBytesUntilETX() {
   memset(SerialLink.BUFFER, 0, 1024);
@@ -289,9 +298,7 @@ void readRXD1_Method1() {
 
 // WRITE TXD1 -------------------------------------------------------------------------------------------------------
 void WriteTXD1() {
-  SerialLink.T0_TXD_1 = millis();
-  if (SerialLink.T0_TXD_1 >= SerialLink.T1_TXD_1+SerialLink.TT_TXD_1) {
-    SerialLink.T1_TXD_1 = SerialLink.T0_TXD_1;
+  if (TXD1ThrottleChecks() == true) {
     if (Serial1.availableForWrite()) {
       Serial.print("[TXD] "); Serial.println(SerialLink.BUFFER);
       Serial1.write(SerialLink.BUFFER);
