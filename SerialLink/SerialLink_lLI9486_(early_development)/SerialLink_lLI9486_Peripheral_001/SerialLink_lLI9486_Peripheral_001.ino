@@ -204,6 +204,8 @@ uint16_t ConvertColor(char * c) {
   if (strcmp(c, "GREENYELLOW") == 0) {return GREENYELLOW;}
 }
 
+
+// PRINT SPACE ------------------------------------------------------------------------------------------------------
 void PrintSpace(unsigned long x, unsigned long y, unsigned long n, uint16_t c0, uint16_t c1) {
   tft.setCursor(x, y);
   tft.setTextColor(c0, c1);
