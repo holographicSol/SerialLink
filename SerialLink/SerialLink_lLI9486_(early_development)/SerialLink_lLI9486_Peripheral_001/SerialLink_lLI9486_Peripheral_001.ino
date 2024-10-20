@@ -185,7 +185,7 @@ void setup(void) {
   InitializeSDCard();
 }
 
-// CONVERT STRINGS TO UINT16_T COLORS -------------------------------------------------------------------------------
+// CONVERT STRINGS TO UINT16_T --------------------------------------------------------------------------------------
 uint16_t ConvertColor(char * c) {
   if (strcmp(c, "BLACK") == 0)       {return BLACK;}
   if (strcmp(c, "NAVY") == 0)        {return NAVY;}
