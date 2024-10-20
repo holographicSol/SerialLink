@@ -204,7 +204,7 @@ uint16_t ConvertColor(char * c) {
 }
 
 // PASSTHROUGH PRINT ------------------------------------------------------------------------------------------------
-void PTPrint() { // passthrough print function
+void PTPrint() {
   while( SerialLink.token != NULL ) {
     Serial.print("[RXD TOKEN "); Serial.print(SerialLink.TOKEN_i); Serial.print("] "); Serial.println(SerialLink.token);
     if (SerialLink.TOKEN_i == 1) {x0 = atol(SerialLink.token);}
