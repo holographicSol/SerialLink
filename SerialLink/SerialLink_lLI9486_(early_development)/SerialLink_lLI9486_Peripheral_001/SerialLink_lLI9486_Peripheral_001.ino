@@ -258,6 +258,11 @@ bool readBytesUntilETX() {
   }
 }
 
+void CompareTokens(char * tk) {
+  if (strcmp(SerialLink.token, "$PRINT") == 0) {PTPrint();}
+  // Plugin more functions when print completed (this SerialLink is for IL19486, there is more functionality to passthrough)
+}
+
 // READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
 void readRXD1_Method0() {
   if (RXD1ThrottleChecks() == true) {
@@ -267,11 +272,7 @@ void readRXD1_Method0() {
         Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
         SerialLink.TOKEN_i = 0;
         SerialLink.token = strtok(SerialLink.DATA, ",");
-        // print: simple and a great place to start wiring up the passthrough
-        if (strcmp(SerialLink.token, "$PRINT") == 0) {
-          PTPrint();
-        }
-        // Plugin more functions when print completed (this SerialLink is for IL19486, there is more functionality to passthrough)
+        CompareTokens(SerialLink.token);
       }
     }
   }
