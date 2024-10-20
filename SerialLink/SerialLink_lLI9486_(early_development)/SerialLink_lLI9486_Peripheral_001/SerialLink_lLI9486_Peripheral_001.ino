@@ -131,7 +131,7 @@ void DebugData(){
 // DEBUG SERIAL -----------------------------------------------------------------------------------------------------
 void DebugSerial(){
   Serial.print("[DEBUG] ");
-  Serial.print(""); Serial.print(debugData); Serial.print(" ");
+  Serial.println(""); Serial.print(debugData);
 }
 
 // DEBUG DISPLAY ----------------------------------------------------------------------------------------------------
