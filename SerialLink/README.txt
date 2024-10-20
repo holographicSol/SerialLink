@@ -91,3 +91,4 @@ Architectural Theory:
 	The difference being that unlike general purpose computers, we have limited memory and other resouces so instructions between peripherals
 	and center may be bespoke, which is as a benefit potentially more efficient than loading a million drivers just in case something is 
 	plugged in that never will be.
+	Accomplishing peripheral communication in 1-2 wires, freeing up more room for expansion/compute on a given 'central' controller.
