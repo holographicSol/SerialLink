@@ -185,6 +185,7 @@ void setup(void) {
   InitializeSDCard();
 }
 
+// CONVERT STRINGS TO UINT16_T COLORS -------------------------------------------------------------------------------
 uint16_t ConvertColor(char * c) {
   if (strcmp(c, "BLACK") == 0)       {return BLACK;}
   if (strcmp(c, "NAVY") == 0)        {return NAVY;}
@@ -204,6 +205,31 @@ uint16_t ConvertColor(char * c) {
   if (strcmp(c, "WHITE") == 0)       {return WHITE;}
   if (strcmp(c, "ORANGE") == 0)      {return ORANGE;}
   if (strcmp(c, "GREENYELLOW") == 0) {return GREENYELLOW;}
+}
+
+// PASSTHROUGH PRINT ------------------------------------------------------------------------------------------------
+void PTPrint(char * token) { // passthrough print function
+  while( token != NULL ) {
+    Serial.print("[RXD TOKEN "); Serial.print(SerialLink.TOKEN_i); Serial.print("] "); Serial.println(token);
+    if (SerialLink.TOKEN_i == 1) {x0 = atol(token);}
+    if (SerialLink.TOKEN_i == 2) {y0 = atol(token);}
+    if (SerialLink.TOKEN_i == 3) {color0 = ConvertColor(token);}
+    if (SerialLink.TOKEN_i == 4) {color1 = ConvertColor(token);}
+    if (SerialLink.TOKEN_i == 5) {color2 = ConvertColor(token);}
+    if (SerialLink.TOKEN_i == 6) {color3 = ConvertColor(token);}
+    if (SerialLink.TOKEN_i == 7) {di = atol(token);}
+    if (SerialLink.TOKEN_i == 8) {memset(printData, 0, sizeof(printData)); strcat(printData, token);}
+    token = strtok(NULL, ",");
+    SerialLink.TOKEN_i++;
+  }
+  tft.setCursor(x0, y0);
+  tft.setTextColor(color2, color3);
+  for (int i=0; i<StrLenStore[0][di]; i++) {tft.print(" ");}
+  StrLenStore[0][di] = strlen(printData);
+  tft.setCursor(x0, y0);
+  tft.setTextColor(color0, color1);
+  tft.print(printData);
+  tft.println(" ");
 }
 
 // READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
@@ -236,27 +262,7 @@ void readRXD1_Method0() {
 
       // print: simple and a great place to start wiring up the passthrough
       if (strcmp(token, "$PRINT") == 0) {
-        while( token != NULL ) {
-          Serial.print("[RXD TOKEN "); Serial.print(SerialLink.TOKEN_i); Serial.print("] "); Serial.println(token);
-          if (SerialLink.TOKEN_i == 1) {x0 = atol(token);}
-          if (SerialLink.TOKEN_i == 2) {y0 = atol(token);}
-          if (SerialLink.TOKEN_i == 3) {color0 = ConvertColor(token);}
-          if (SerialLink.TOKEN_i == 4) {color1 = ConvertColor(token);}
-          if (SerialLink.TOKEN_i == 5) {color2 = ConvertColor(token);}
-          if (SerialLink.TOKEN_i == 6) {color3 = ConvertColor(token);}
-          if (SerialLink.TOKEN_i == 7) {di = atol(token);}
-          if (SerialLink.TOKEN_i == 8) {memset(printData, 0, sizeof(printData)); strcat(printData, token);}
-          token = strtok(NULL, ",");
-          SerialLink.TOKEN_i++;
-        }
-        tft.setCursor(x0, y0);
-        tft.setTextColor(color2, color3);
-        for (int i=0; i<StrLenStore[0][di]; i++) {tft.print(" ");}
-        StrLenStore[0][di] = strlen(printData);
-        tft.setCursor(x0, y0);
-        tft.setTextColor(color0, color1);
-        tft.print(printData);
-        tft.println(" ");
+        PTPrint(token);
       }
 
       // Plugin more functions when print completed (this SerialLink is for IL19486, there is more functionality to passthrough)
