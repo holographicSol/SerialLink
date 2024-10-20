@@ -235,11 +235,17 @@ void PTPrint() {
   tft.println(" ");
 }
 
-// READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
-void readRXD1_Method0() {
+bool RXD1ThrottleChecks() {
   SerialLink.T0_RXD_1 = millis();
   if (SerialLink.T0_RXD_1 >= SerialLink.T1_RXD_1+SerialLink.TT_RXD_1) {
     SerialLink.T1_RXD_1 = SerialLink.T0_RXD_1;
+    return true;
+  }
+}
+
+// READ RXD: METHOD 0 -----------------------------------------------------------------------------------------------
+void readRXD1_Method0() {
+  if (RXD1ThrottleChecks() == true) {
     if (Serial1.available() > 0) {
       memset(SerialLink.BUFFER, 0, 1024);
       memset(SerialLink.DATA, 0, 1024);
