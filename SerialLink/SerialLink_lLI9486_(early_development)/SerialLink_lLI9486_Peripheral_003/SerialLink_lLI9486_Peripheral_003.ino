@@ -564,7 +564,7 @@ bool readBytesUntilETX() {
 // COMPARE TOKENS ---------------------------------------------------------------------------------------------------
 void CompareTokens() {
   // if (strcmp(SerialLink.token, "$PAGE") == 0) {PTPage();}
-  else if (strcmp(SerialLink.token, "$PRINT") == 0) {PTPrint();}
+  if (strcmp(SerialLink.token, "$PRINT") == 0) {PTPrint();}
   else if (strcmp(SerialLink.token, "$DRAWFASTHLINE") == 0) {PTdrawFastHLine();}
   else if (strcmp(SerialLink.token, "$DRAWFASTVLINET") == 0) {PTdrawFastVLine();}
   else if (strcmp(SerialLink.token, "$WRITEFASTHLINE") == 0) {PTwriteFastHLine();}
