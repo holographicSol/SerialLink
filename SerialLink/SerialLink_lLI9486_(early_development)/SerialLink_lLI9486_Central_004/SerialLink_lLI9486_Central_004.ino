@@ -92,9 +92,7 @@ void readRXD1_Method1() {
     Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
     SerialLink.TOKEN_i = 0;
     char * token = strtok(SerialLink.DATA, ",");
-    
     if (strcmp(token, "$SYN") == 0) {SerialLink.ack = true;}
-
     else if (strcmp(token, "$CLICK") == 0) {
       while( token != NULL ) {
         Serial.print("[RXD TOKEN "); Serial.print(SerialLink.TOKEN_i); Serial.print("] "); Serial.println(token);
@@ -132,7 +130,7 @@ void TXD2Data() {
 
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
-  while (1) {readRXD1_Method1(); if (SerialLink.ack == true) {break;}}  // wait for peripehral
+  while (1) {readRXD1_Method1(); if (SerialLink.ack == true) {break;}}  // wait for peripehral (comment to dump)
   SerialLink.ack = false;
   TXD2Data();
   delay(1);
