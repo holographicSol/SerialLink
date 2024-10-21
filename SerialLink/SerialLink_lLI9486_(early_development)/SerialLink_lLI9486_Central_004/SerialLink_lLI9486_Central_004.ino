@@ -118,20 +118,19 @@ void WriteTXD2() {
 }
 
 // TXD2 DATA --------------------------------------------------------------------------------------------------------
-void TXD2Data() {
-  // send a peripherals state to the display peripheral
+void TXD2DataLED0State() {
+  // example function instructs the display to print informaiton about an LED.
   memset(SerialLink.BUFFER, 0, 1024);
   strcat(SerialLink.BUFFER, "$PRINT,10,20,WHITE,BLACK,BLACK,BLACK,1,LED0:");
   if (digitalRead(LED0) == 1) {strcat(SerialLink.BUFFER, "1");}
   else if (digitalRead(LED0) == 0) {strcat(SerialLink.BUFFER, "0");}
   WriteTXD2();
-  // can send more to other and or same peripherals...
 }
 
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
-  while (1) {readRXD1_Method1(); if (SerialLink.ack == true) {break;}}  // wait for peripehral (comment to dump)
+  while (1) {readRXD1_Method1(); if (SerialLink.ack == true) {break;}}  // wait for peripehral
   SerialLink.ack = false;
-  TXD2Data();
+  TXD2DataLED0State();
   delay(1);
 }
