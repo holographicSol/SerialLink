@@ -22,9 +22,9 @@ struct SerialLinkStruct {
   unsigned long T0_RXD_2 = 0;  // hard throttle current time
   unsigned long T1_RXD_2 = 0;  // hard throttle previous time
   unsigned long TT_RXD_2 = 0;  // hard throttle interval
-  unsigned long T0_TXD_2 = 0;   // hard throttle current time
-  unsigned long T1_TXD_2 = 0;   // hard throttle previous time
-  unsigned long TT_TXD_2 = 10;  // hard throttle interval
+  unsigned long T0_TXD_2 = 0;  // hard throttle current time
+  unsigned long T1_TXD_2 = 0;  // hard throttle previous time
+  unsigned long TT_TXD_2 = 0;  // hard throttle interval
   unsigned long TOKEN_i;
   bool ack = false;
 };
@@ -89,7 +89,7 @@ void readRXD1_Method1() {
     memset(SerialLink.DATA, 0, 1024);
     SerialLink.nbytes = (Serial1.readBytesUntil(ETX, SerialLink.DATA, sizeof(SerialLink.DATA)));
     Serial.println("-------------------------------------------");
-    Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
+    Serial.print("[RXD] "); Serial.println(SerialLink.DATA);
     SerialLink.TOKEN_i = 0;
     char * token = strtok(SerialLink.DATA, ",");
     if (strcmp(token, "$SYN") == 0) {SerialLink.ack = true;}
@@ -110,7 +110,7 @@ void WriteTXD2() {
   if (SerialLink.T0_TXD_2 >= SerialLink.T1_TXD_2+SerialLink.TT_TXD_2) {
     SerialLink.T1_TXD_2 = SerialLink.T0_TXD_2;
     if (Serial2.availableForWrite()) {
-      // Serial.print("[TXD] "); Serial.println(SerialLink.BUFFER);
+      Serial.print("[TXD] "); Serial.println(SerialLink.BUFFER);
       Serial2.write(SerialLink.BUFFER);
       Serial2.write(ETX);
     }
