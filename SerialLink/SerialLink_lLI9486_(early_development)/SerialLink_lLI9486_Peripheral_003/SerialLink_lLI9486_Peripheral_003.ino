@@ -562,31 +562,32 @@ bool readBytesUntilETX() {
 }
 
 // COMPARE TOKENS ---------------------------------------------------------------------------------------------------
-void CompareTokens(char * tk) {
-  if (strcmp(SerialLink.token, "$PRINT") == 0) {PTPrint();}
-  if (strcmp(SerialLink.token, "$DRAWFASTHLINE") == 0) {PTdrawFastHLine();}
-  if (strcmp(SerialLink.token, "$DRAWFASTVLINET") == 0) {PTdrawFastVLine();}
-  if (strcmp(SerialLink.token, "$WRITEFASTHLINE") == 0) {PTwriteFastHLine();}
-  if (strcmp(SerialLink.token, "$WRITEFASTVLINE") == 0) {PTwriteFastVLine();}
-  if (strcmp(SerialLink.token, "$DRAWPIXEL") == 0) {PTdrawPixel();}
-  if (strcmp(SerialLink.token, "$FILLRECT") == 0) {PTfillRect();}
-  if (strcmp(SerialLink.token, "$FILLSCREEN") == 0) {PTfillScreen();}
-  if (strcmp(SerialLink.token, "$INVERTDISPLAY") == 0) {PTinvertDisplay();}
-  if (strcmp(SerialLink.token, "$SETROTATION") == 0) {PTsetRotation();}
-  if (strcmp(SerialLink.token, "$DRAWBITMAP") == 0) {PTdrawBitmap();}
-  if (strcmp(SerialLink.token, "$DRAWCIRCLE") == 0) {PTdrawCircle();}
-  if (strcmp(SerialLink.token, "$DRAWCIRCLEHELPER") == 0) {PTdrawCircleHelper();}
-  if (strcmp(SerialLink.token, "$DRAWGREYSCALEBITMAP") == 0) {PTdrawGrayscaleBitmap();}
-  if (strcmp(SerialLink.token, "$DRAWLINE") == 0) {PTdrawLine();}
-  if (strcmp(SerialLink.token, "$DRAWRECT") == 0) {PTdrawRect();}
-  if (strcmp(SerialLink.token, "$DRAWRGBBITMAP") == 0) {PTdrawRGBBitmap();}
-  if (strcmp(SerialLink.token, "$DRAWROUNDRECT") == 0) {PTdrawRoundRect();}
-  if (strcmp(SerialLink.token, "$DRAWTRIANGLE") == 0) {PTdrawTriangle();}
-  if (strcmp(SerialLink.token, "$DRAWXBITMAP") == 0) {PTdrawXBitmap();}
-  if (strcmp(SerialLink.token, "$FILLROUNDRECT") == 0) {PTfillRoundRect();}
-  if (strcmp(SerialLink.token, "$FILLCIRCLE") == 0) {PTfillCircle();}
-  if (strcmp(SerialLink.token, "$FILLTRIANGLE") == 0) {PTfillTriangle();}
-  if (strcmp(SerialLink.token, "$WRITEPIXEL") == 0) {PTwritePixel();}
+void CompareTokens() {
+  // if (strcmp(SerialLink.token, "$PAGE") == 0) {PTPage();}
+  else if (strcmp(SerialLink.token, "$PRINT") == 0) {PTPrint();}
+  else if (strcmp(SerialLink.token, "$DRAWFASTHLINE") == 0) {PTdrawFastHLine();}
+  else if (strcmp(SerialLink.token, "$DRAWFASTVLINET") == 0) {PTdrawFastVLine();}
+  else if (strcmp(SerialLink.token, "$WRITEFASTHLINE") == 0) {PTwriteFastHLine();}
+  else if (strcmp(SerialLink.token, "$WRITEFASTVLINE") == 0) {PTwriteFastVLine();}
+  else if (strcmp(SerialLink.token, "$DRAWPIXEL") == 0) {PTdrawPixel();}
+  else if (strcmp(SerialLink.token, "$FILLRECT") == 0) {PTfillRect();}
+  else if (strcmp(SerialLink.token, "$FILLSCREEN") == 0) {PTfillScreen();}
+  else if (strcmp(SerialLink.token, "$INVERTDISPLAY") == 0) {PTinvertDisplay();}
+  else if (strcmp(SerialLink.token, "$SETROTATION") == 0) {PTsetRotation();}
+  else if (strcmp(SerialLink.token, "$DRAWBITMAP") == 0) {PTdrawBitmap();}
+  else if (strcmp(SerialLink.token, "$DRAWCIRCLE") == 0) {PTdrawCircle();}
+  else if (strcmp(SerialLink.token, "$DRAWCIRCLEHELPER") == 0) {PTdrawCircleHelper();}
+  else if (strcmp(SerialLink.token, "$DRAWGREYSCALEBITMAP") == 0) {PTdrawGrayscaleBitmap();}
+  else if (strcmp(SerialLink.token, "$DRAWLINE") == 0) {PTdrawLine();}
+  else if (strcmp(SerialLink.token, "$DRAWRECT") == 0) {PTdrawRect();}
+  else if (strcmp(SerialLink.token, "$DRAWRGBBITMAP") == 0) {PTdrawRGBBitmap();}
+  else if (strcmp(SerialLink.token, "$DRAWROUNDRECT") == 0) {PTdrawRoundRect();}
+  else if (strcmp(SerialLink.token, "$DRAWTRIANGLE") == 0) {PTdrawTriangle();}
+  else if (strcmp(SerialLink.token, "$DRAWXBITMAP") == 0) {PTdrawXBitmap();}
+  else if (strcmp(SerialLink.token, "$FILLROUNDRECT") == 0) {PTfillRoundRect();}
+  else if (strcmp(SerialLink.token, "$FILLCIRCLE") == 0) {PTfillCircle();}
+  else if (strcmp(SerialLink.token, "$FILLTRIANGLE") == 0) {PTfillTriangle();}
+  else if (strcmp(SerialLink.token, "$WRITEPIXEL") == 0) {PTwritePixel();}
 }
 
 // READ RXD1 METHOD 0 -----------------------------------------------------------------------------------------------
@@ -598,7 +599,7 @@ void readRXD1_Method0() {
         Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
         SerialLink.TOKEN_i = 0;
         SerialLink.token = strtok(SerialLink.DATA, ",");
-        CompareTokens(SerialLink.token);
+        CompareTokens();
       }
     }
   }
