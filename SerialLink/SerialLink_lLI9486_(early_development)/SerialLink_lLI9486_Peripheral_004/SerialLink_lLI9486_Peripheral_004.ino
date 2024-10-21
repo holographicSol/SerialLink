@@ -97,7 +97,7 @@ struct SerialLinkStruct {
   unsigned long TT_RXD_1 = 0;   // hard throttle interval
   unsigned long T0_TXD_1 = 0;   // hard throttle current time
   unsigned long T1_TXD_1 = 0;   // hard throttle previous time
-  unsigned long TT_TXD_1 = 10;  // hard throttle interval
+  unsigned long TT_TXD_1 = 0;   // hard throttle interval
   unsigned long TOKEN_i;
   char * token = strtok(BUFFER, ",");
 };
@@ -632,8 +632,12 @@ double calculate_fps(float microseconds) {
 
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
+  // get instructions
   readRXD1_Method0();
+  // get touchscreen data
   GetPanelXYZ();
+
+  // debug
   DebugData();
   DebugSerial();
   t_display_0 = micros();
@@ -643,7 +647,5 @@ void loop() {
   fps = calculate_fps(t_display_delta);
 
   // send synchronization message
-  memset(SerialLink.BUFFER, 0, 1024);
-  strcat(SerialLink.BUFFER, "$SYN");
-  WriteTXD1();
+  memset(SerialLink.BUFFER, 0, 1024); strcat(SerialLink.BUFFER, "$SYN"); WriteTXD1();
 }
