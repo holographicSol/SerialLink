@@ -22,7 +22,7 @@ struct SerialLinkStruct {
   long i_sync;
   char char_i_sync[56];
   char * token = strtok(BUFFER, ",");
-  bool ack = false;
+  bool syn = false;
   bool data = false;
   char BUFFER[1024];           // read incoming bytes into this buffer
   char DATA[1024];             // buffer refined using ETX
@@ -93,7 +93,7 @@ void readRXD1() {
       
       if (strcmp(SerialLink.token, "$DATA") == 0) {SerialLink.data = true;}
 
-      else if (strcmp(SerialLink.token, "$SYN") == 0) {SerialLink.ack = true;}
+      else if (strcmp(SerialLink.token, "$SYN") == 0) {SerialLink.syn = true;}
     }
   }
 }
@@ -120,7 +120,7 @@ void sendSyn() {
 }
 
 void receiveSyn() {
-  while (1) {readRXD1(); if (SerialLink.ack == true) {SerialLink.ack = false; break;}}
+  while (1) {readRXD1(); if (SerialLink.syn == true) {SerialLink.syn = false; break;}}
 }
 
 void synCom() {
