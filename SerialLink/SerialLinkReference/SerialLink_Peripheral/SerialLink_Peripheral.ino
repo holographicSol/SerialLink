@@ -139,7 +139,7 @@ void loop() {
   synCom();
   
   // simulate long function time
-  delay(1000);
+  // delay(1000);
   // write data to other controller
   memset(SerialLink.BUFFER, 0, 1024); strcat(SerialLink.BUFFER, "$DATA,1,2,3"); writeTXD1();
 
@@ -150,7 +150,7 @@ void loop() {
   synCom();
 
   // simulate long function time
-  delay(1000);
+  // delay(1000);
   // write data to other controller
   memset(SerialLink.BUFFER, 0, 1024); strcat(SerialLink.BUFFER, "$DATA,A,B,C"); writeTXD1();
 
