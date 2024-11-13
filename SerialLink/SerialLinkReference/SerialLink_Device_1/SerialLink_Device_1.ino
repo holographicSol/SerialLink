@@ -137,30 +137,17 @@ void receiveData() {
   while (1) {readRXD1(); if (SerialLink.data == true) {SerialLink.data = false; break;}}
 }
 
+// SEND DATA --------------------------------------------------------------------------------------------------------
+void sendData(char * data) {
+  memset(SerialLink.BUFFER, 0, sizeof(SerialLink.BUFFER)); strcat(SerialLink.BUFFER, data); writeTXD1();
+}
+
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
 
-  synCom();
-  
-  // simulate long function time
-  // delay(1000);
-  // write data to other controller
-  memset(SerialLink.BUFFER, 0, sizeof(SerialLink.BUFFER)); strcat(SerialLink.BUFFER, "$DATA,1,2,3"); writeTXD1();
+  synCom(); sendData("$DATA,A,B,C");
 
-  synCom();
-
-  receiveData();
-
-  synCom();
-
-  // simulate long function time
-  // delay(1000);
-  // write data to other controller
-  memset(SerialLink.BUFFER, 0, sizeof(SerialLink.BUFFER)); strcat(SerialLink.BUFFER, "$DATA,A,B,C"); writeTXD1();
-
-  synCom();
-
-  receiveData();
+  synCom(); receiveData();
 
   // delay(1000);
 }
