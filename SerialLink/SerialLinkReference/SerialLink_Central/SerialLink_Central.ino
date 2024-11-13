@@ -1,10 +1,6 @@
 /*
 Serial Link - Stable inter-microcontroller serial communication. Written by Benjamin Jack Cullen
 
-Change Serial1/2/etc to any other isolated Serial as required.
-Methods: I found that method 0 works perfectly for ATMEGA2560 on my specific dev board however method 0 did not yeild
-on ESP32 where a simple read until ETX was all that was required. Both methods remain in this template/reference sketch. 
-
 ESP32 TX -> io25
 ESP32 RX -> io26
 
