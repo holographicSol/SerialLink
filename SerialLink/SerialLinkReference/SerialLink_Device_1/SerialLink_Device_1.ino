@@ -92,7 +92,7 @@ void readRXD1() {
       SerialLink.TOKEN_i = 0;
 
       SerialLink.token = strtok(SerialLink.BUFFER, ",");
-      if (strcmp(SerialLink.token, "$DATA") == 0) {SerialLink.data = true;}
+      if (strcmp(SerialLink.token, "$DATA") == 0) {SerialLink.syn = true;}
       else if (strcmp(SerialLink.token, "$SYN") == 0) {SerialLink.syn = true;}
     }
   }
@@ -122,7 +122,7 @@ void sendSyn() {
 
 // RECEIVE SYN ------------------------------------------------------------------------------------------------------
 void receiveSyn() {
-  while (1) {readRXD1(); if (SerialLink.syn == true) {SerialLink.syn = false; break;}}
+  while (1) {readRXD1(); Serial.println("[syn] waiting"); if (SerialLink.syn == true) {SerialLink.syn = false; break;}}
 }
 
 // SEND RECEIVE SYN -------------------------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ void synCom() {
 
 // RECEIVE DATA -----------------------------------------------------------------------------------------------------
 void receiveData() {
-  while (1) {readRXD1(); if (SerialLink.data == true) {SerialLink.data = false; break;}}
+  while (1) {readRXD1(); Serial.println("[data] waiting"); if (SerialLink.syn == true) {SerialLink.syn = false; break;}}
 }
 
 // SEND DATA --------------------------------------------------------------------------------------------------------
@@ -144,6 +144,7 @@ void sendData(char * data) {
 
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
+  sendSyn();
 
   // sync receive
   synCom(); receiveData();
