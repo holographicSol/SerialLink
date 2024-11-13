@@ -1,23 +1,22 @@
 /*
 
-SerialLink - Stable inter-microcontroller serial communication. Written by Benjamin Jack Cullen
+Serial Link - Stable inter-microcontroller serial communication. Written by Benjamin Jack Cullen
 
 */
 
 #include <limits.h>
 
 // ------------------------------------------------------------------------------------------------------------------
-#define ETX 0x03  // end of text character
+#define ETX 0x03 // end of text character
 
 // PINS -------------------------------------------------------------------------------------------------------------
 // uncomment following 4 lines for ESP32 CYD
-// const int8_t ctsPin = -1;  // remap hardware serial TXD
-// const int8_t rtsPin = -1;  // remap hardware serial RXD
-// const byte txd = 27;       // CYD TXD
-// const byte rxd = 22;       // CYD RXD
+const int8_t ctsPin = -1;  // remap hardware serial TXD
+const int8_t rtsPin = -1;  // remap hardware serial RXD
+const byte txd = 27;       // CYD TXD
+const byte rxd = 22;       // CYD RXD
 
 // SERIAL LINK STRUCT -----------------------------------------------------------------------------------------------
-long i_sync;
 struct SerialLinkStruct {
   int i_nbytes;
   long i_sync;
@@ -25,7 +24,7 @@ struct SerialLinkStruct {
   char * token = strtok(BUFFER, ",");
   bool syn = false;
   bool data = false;
-  char BUFFER[1024];            // read incoming bytes into this buffer
+  char BUFFER[1024];           // read incoming bytes into this buffer
   char TMP[1024];               // buffer refined using ETX
   unsigned long nbytes;
   unsigned long T0_RXD_1 = 0;   // hard throttle current time
@@ -39,10 +38,10 @@ struct SerialLinkStruct {
 SerialLinkStruct SerialLink;
 
 // SETUP ------------------------------------------------------------------------------------------------------------
-void setup(void) {
+void setup() {
   Serial.begin(115200); while(!Serial);
+  Serial1.setPins(rxd, txd, ctsPin, rtsPin);
   Serial1.begin(115200); while(!Serial1);
-  Serial1.setTimeout(5);
   Serial.flush();
   Serial1.flush();
 }
@@ -150,7 +149,7 @@ void loop() {
   synCom(); receiveData();
 
   // sync send
-  synCom(); sendData("$DATA,A,B,C");
+  synCom(); sendData("$DATA,1,2,3");
 
-  // delay(1000);
+  delay(1000);
 }
