@@ -145,10 +145,10 @@ void sendData(char * data) {
 void loop() {
 
   // sync receive
-  synCom(); sendData("$DATA,1,2,3");
+  synCom(); receiveData();
 
   // sync send
-  synCom(); receiveData();
+  synCom(); sendData("$DATA,1,2,3");
 
   // delay(1000);
 }
