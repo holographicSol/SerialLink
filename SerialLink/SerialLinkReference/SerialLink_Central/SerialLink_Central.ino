@@ -1,6 +1,10 @@
 /*
 Serial Link - Stable inter-microcontroller serial communication. Written by Benjamin Jack Cullen
 
+Change Serial1/2/etc to any other isolated Serial as required.
+Methods: I found that method 0 works perfectly for ATMEGA2560 on my specific dev board however method 0 did not yeild
+on ESP32 where a simple read until ETX was all that was required. Both methods remain in this template/reference sketch. 
+
 ESP32 TX -> io25
 ESP32 RX -> io26
 
@@ -25,7 +29,7 @@ struct SerialLinkStruct {
   long i_sync;
   char char_i_sync[56];
   char * token = strtok(BUFFER, ",");
-  bool ack = false;
+  bool syn = false;
   bool data = false;
   char BUFFER[1024];           // read incoming bytes into this buffer
   char DATA[1024];             // buffer refined using ETX
@@ -81,7 +85,7 @@ void readRXD1() {
 
       if (strcmp(SerialLink.token, "$DATA") == 0) {SerialLink.data = true;}
 
-      else if (strcmp(SerialLink.token, "$SYN") == 0) {SerialLink.ack = true;}
+      else if (strcmp(SerialLink.token, "$SYN") == 0) {SerialLink.syn = true;}
     }
   }
 }
@@ -108,7 +112,7 @@ void sendSyn() {
 }
 
 void receiveSyn() {
-  while (1) {readRXD1(); if (SerialLink.ack == true) {SerialLink.ack = false; break;}}
+  while (1) {readRXD1(); if (SerialLink.syn == true) {SerialLink.syn = false; break;}}
 }
 
 void synCom() {
