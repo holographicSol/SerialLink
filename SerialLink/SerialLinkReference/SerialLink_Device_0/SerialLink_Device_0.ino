@@ -144,8 +144,10 @@ void sendData(char * data) {
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
 
+  // sync receive
   synCom(); sendData("$DATA,1,2,3");
 
+  // sync send
   synCom(); receiveData();
 
   // delay(1000);
