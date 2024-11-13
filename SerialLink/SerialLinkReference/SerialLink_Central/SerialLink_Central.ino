@@ -5,153 +5,150 @@ Change Serial1/2/etc to any other isolated Serial as required.
 Methods: I found that method 0 works perfectly for ATMEGA2560 on my specific dev board however method 0 did not yeild
 on ESP32 where a simple read until ETX was all that was required. Both methods remain in this template/reference sketch. 
 
-ESP32 TX -> io25 -> Serial2
-ESP32 RX -> io26 -> Serial2
+ESP32 TX -> io25
+ESP32 RX -> io26
 
 */
 
+#include <limits.h>
+
 // ------------------------------------------------------------------------------------------------------------------
 #define ETX 0x03 // end of text character
+#define LED0 33
+
+// uncomment following 4 lines for CYD
+const int8_t ctsPin = -1;  // remap hardware serial TXD
+const int8_t rtsPin = -1;  // remap hardware serial RXD
+const byte txd = 27;  // CYD TXD (remapped TXD pin 27) --> to ATMEGA2560 RXD1 (pin 19)
+const byte rxd = 22;   // GPS TXD to --> CYD RXD (remapped RXD pin 22)
 
 // SERIAL LINK STRUCT -----------------------------------------------------------------------------------------------
+
 struct SerialLinkStruct {
-  char debugData[1024];
-  unsigned long nbytes;
-  unsigned long i_nbytes;
+  int i_nbytes;
+  long i_sync;
+  char char_i_sync[56];
+  char * token = strtok(BUFFER, ",");
+  bool ack = false;
+  bool data = false;
   char BUFFER[1024];           // read incoming bytes into this buffer
   char DATA[1024];             // buffer refined using ETX
-  unsigned long T0_RXD_2 = 0;  // hard throttle current time
-  unsigned long T1_RXD_2 = 0;  // hard throttle previous time
-  unsigned long TT_RXD_2 = 0;  // hard throttle interval
-  unsigned long T0_TXD_2 = 0;   // hard throttle current time
-  unsigned long T1_TXD_2 = 0;   // hard throttle previous time
-  unsigned long TT_TXD_2 = 0;  // hard throttle interval
+  unsigned long nbytes;
+  unsigned long T0_RXD_1 = 0;   // hard throttle current time
+  unsigned long T1_RXD_1 = 0;   // hard throttle previous time
+  unsigned long TT_RXD_1 = 0;   // hard throttle interval
+  unsigned long T0_TXD_1 = 0;   // hard throttle current time
+  unsigned long T1_TXD_1 = 0;   // hard throttle previous time
+  unsigned long TT_TXD_1 = 10;  // hard throttle interval
   unsigned long TOKEN_i;
-  char * token = strtok(BUFFER, ",");
 };
 SerialLinkStruct SerialLink;
-
-// DEBUG DATA -------------------------------------------------------------------------------------------------------
-void DebugData(){
-  strcat(SerialLink.debugData, "");
-  // ...strcats
-}
-
-// DEBUG SERIAL -----------------------------------------------------------------------------------------------------
-void DebugSerial(){
-  Serial.print("[DEBUG] "); Serial.println(SerialLink.debugData);
-}
 
 // SETUP ------------------------------------------------------------------------------------------------------------
 void setup() {
   Serial.begin(115200); while(!Serial);
+  Serial1.setPins(rxd, txd, ctsPin, rtsPin);
   Serial1.begin(115200); while(!Serial1);
-  Serial2.begin(115200); while(!Serial1);
   Serial.flush();
   Serial1.flush();
-  Serial2.flush();
-}
-
-// PASSTHROUGH ANY --------------------------------------------------------------------------------------------------
-void PTATAG() {
-  while( SerialLink.token != NULL ) {
-    Serial.print("[RXD TOKEN "); Serial.print(SerialLink.TOKEN_i); Serial.print("] "); Serial.println(SerialLink.token);
-    SerialLink.token = strtok(NULL, ",");
-    SerialLink.TOKEN_i++;
-  }
 }
 
 // RXD1 THROTTLE CHECKS ---------------------------------------------------------------------------------------------
 bool RXD1ThrottleChecks() {
-  SerialLink.T0_RXD_2 = millis();
-  if (SerialLink.T0_RXD_2 >= SerialLink.T1_RXD_2+SerialLink.TT_RXD_2) {
-    SerialLink.T1_RXD_2 = SerialLink.T0_RXD_2;
+  SerialLink.T0_RXD_1 = millis();
+  if (SerialLink.T0_RXD_1 >= SerialLink.T1_RXD_1+SerialLink.TT_RXD_1) {
+    SerialLink.T1_RXD_1 = SerialLink.T0_RXD_1;
     return true;
   }
 }
 
 // TXD1 THROTTLE CHECKS ---------------------------------------------------------------------------------------------
-bool TXD2ThrottleChecks() {
-SerialLink.T0_TXD_2 = millis();
-if (SerialLink.T0_TXD_2 >= SerialLink.T1_TXD_2+SerialLink.TT_TXD_2) {
-  SerialLink.T1_TXD_2 = SerialLink.T0_TXD_2;
-  return true;
-}
-}
-
-// RXD1 READ BYTES UNTIL ETX ----------------------------------------------------------------------------------------
-bool readBytesUntilETX() {
-  memset(SerialLink.BUFFER, 0, 1024);
-  memset(SerialLink.DATA, 0, 1024);
-  SerialLink.nbytes = Serial1.readBytes(SerialLink.BUFFER, 1024);
-  if (SerialLink.nbytes != 0) {
-    for(SerialLink.i_nbytes = 0; SerialLink.i_nbytes < SerialLink.nbytes; SerialLink.i_nbytes++) {
-      if (SerialLink.BUFFER[SerialLink.i_nbytes] == ETX)
-        return true;
-      else {SerialLink.DATA[SerialLink.i_nbytes] = SerialLink.BUFFER[SerialLink.i_nbytes];}
-    }
+bool TXD1ThrottleChecks() {
+  SerialLink.T0_TXD_1 = millis();
+  if (SerialLink.T0_TXD_1 >= SerialLink.T1_TXD_1+SerialLink.TT_TXD_1) {
+    SerialLink.T1_TXD_1 = SerialLink.T0_TXD_1;
+    return true;
   }
 }
 
-// COMPARE TOKENS ---------------------------------------------------------------------------------------------------
-void CompareTokens(char * tk) {
-  if (strcmp(SerialLink.token, "$BAR") == 0) {PTATAG();}
-  // ...more tags
-}
-
-// READ RXD1 METHOD 0 -----------------------------------------------------------------------------------------------
-void readRXD1_Method0() {
-  if (RXD1ThrottleChecks() == true) {
-    if (Serial1.available() > 0) {
-      if (readBytesUntilETX() == true) {
-        Serial.println("-------------------------------------------");
-        Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
-        SerialLink.TOKEN_i = 0;
-        SerialLink.token = strtok(SerialLink.DATA, ",");
-        CompareTokens(SerialLink.token);
-      }
-    }
-  }
-}
-
-// READ RXD: METHOD 1 -----------------------------------------------------------------------------------------------
-void readRXD1_Method1() {
-  if (RXD1ThrottleChecks() == true) {
-    if (Serial1.available() > 0) {
-      memset(SerialLink.DATA, 0, 1024);
-      SerialLink.nbytes = (Serial1.readBytesUntil(ETX, SerialLink.DATA, sizeof(SerialLink.DATA)));
-      Serial.println("-------------------------------------------");
-      Serial.print("[RXD]         "); Serial.println(SerialLink.DATA);
+// READ RXD -----------------------------------------------------------------------------------------------
+void readRXD1() {
+  if (Serial1.available() > 0) {
+    memset(SerialLink.DATA, 0, 1024);
+    SerialLink.nbytes = (Serial1.readBytesUntil(ETX, SerialLink.DATA, sizeof(SerialLink.DATA)));
+    
+    if (SerialLink.nbytes > 1) {
+      Serial.print("[RXD] "); Serial.println(SerialLink.DATA);
       SerialLink.TOKEN_i = 0;
+
       SerialLink.token = strtok(SerialLink.DATA, ",");
-      CompareTokens(SerialLink.token);
+
+      if (strcmp(SerialLink.token, "$DATA") == 0) {SerialLink.data = true;}
+
+      else if (strcmp(SerialLink.token, "$SYN") == 0) {SerialLink.ack = true;}
     }
   }
 }
 
-// WRITE TXD2 -------------------------------------------------------------------------------------------------------
-void WriteTXD2() {
-  if (TXD2ThrottleChecks() == true) {
-    if (Serial2.availableForWrite()) {
+// WRITE TXD1 -------------------------------------------------------------------------------------------------------
+void writeTXD1() {
+  if (TXD1ThrottleChecks() == true) {
+    if (Serial1.availableForWrite()) {
       Serial.print("[TXD] "); Serial.println(SerialLink.BUFFER);
-      Serial2.write(SerialLink.BUFFER);
-      Serial2.write(ETX);
+      Serial1.write(SerialLink.BUFFER);
+      Serial1.write(ETX);
     }
   }
 }
 
-// TXD2 DATA --------------------------------------------------------------------------------------------------------
-void TXD2Data() {
-  // send a peripherals state to the display peripheral
+void sendSyn() {
+  SerialLink.i_sync++;
+  if (SerialLink.i_sync>LONG_MAX) {SerialLink.i_sync=0;}
+  itoa(SerialLink.i_sync, SerialLink.char_i_sync, 10);
   memset(SerialLink.BUFFER, 0, 1024);
-  strcat(SerialLink.BUFFER, "$FOO,1,20,300,4000,50000,600000");
-  WriteTXD2();
-  // can send more to other and or same peripherals...
+  strcat(SerialLink.BUFFER, "$SYN,");
+  strcat(SerialLink.BUFFER, SerialLink.char_i_sync);
+  writeTXD1();
+}
+
+void receiveSyn() {
+  while (1) {readRXD1(); if (SerialLink.ack == true) {SerialLink.ack = false; break;}}
+}
+
+void synCom() {
+  Serial.println("-------------------------------------------");
+  sendSyn();
+  receiveSyn();
+}
+
+void receiveData() {
+  while (1) {readRXD1(); if (SerialLink.data == true) {SerialLink.data = false; break;}}
 }
 
 // LOOP -------------------------------------------------------------------------------------------------------------
 void loop() {
-  readRXD1_Method1();
-  TXD2Data();
-  delay(1);
+
+  synCom();
+
+  // simulate long function time
+  delay(1000);
+  // write data to other controller
+  memset(SerialLink.BUFFER, 0, 1024); strcat(SerialLink.BUFFER, "$DATA,4,5,6"); writeTXD1();
+
+  synCom();
+
+  receiveData();
+
+  synCom();
+
+  // simulate long function time
+  delay(1000);
+  // write data to other controller
+  memset(SerialLink.BUFFER, 0, 1024); strcat(SerialLink.BUFFER, "$DATA,D,E,F"); writeTXD1();
+
+  synCom();
+
+  receiveData();
+
+  // delay(1000);
 }
